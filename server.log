@@ -1,0 +1,28 @@
+2024-09-24T22:48:50.452+0800	INFO	userService/userService.go:30	获取用户成功	{"username": "ximo1"}
+2024-09-24T22:48:50.474+0800	ERROR	userController/register.go:45	用户名已存在	{"username": "ximo1"}
+ConfessionWall/app/controllers/userController.Register
+	D:/桌面/ConfessionWallServer/app/controllers/userController/register.go:45
+github.com/gin-gonic/gin.(*Context).Next
+	C:/Users/Lenovo/go/pkg/mod/github.com/gin-gonic/gin@v1.10.0/context.go:185
+github.com/gin-gonic/gin.CustomRecoveryWithWriter.func1
+	C:/Users/Lenovo/go/pkg/mod/github.com/gin-gonic/gin@v1.10.0/recovery.go:102
+github.com/gin-gonic/gin.(*Context).Next
+	C:/Users/Lenovo/go/pkg/mod/github.com/gin-gonic/gin@v1.10.0/context.go:185
+github.com/gin-gonic/gin.LoggerWithConfig.func1
+	C:/Users/Lenovo/go/pkg/mod/github.com/gin-gonic/gin@v1.10.0/logger.go:249
+github.com/gin-gonic/gin.(*Context).Next
+	C:/Users/Lenovo/go/pkg/mod/github.com/gin-gonic/gin@v1.10.0/context.go:185
+github.com/gin-gonic/gin.(*Engine).handleHTTPRequest
+	C:/Users/Lenovo/go/pkg/mod/github.com/gin-gonic/gin@v1.10.0/gin.go:633
+github.com/gin-gonic/gin.(*Engine).ServeHTTP
+	C:/Users/Lenovo/go/pkg/mod/github.com/gin-gonic/gin@v1.10.0/gin.go:589
+net/http.serverHandler.ServeHTTP
+	C:/Program Files/Go/src/net/http/server.go:3210
+net/http.(*conn).serve
+	C:/Program Files/Go/src/net/http/server.go:2092
+2024-09-24T22:48:50.483+0800	INFO	utils/jsonResponse.go:16	发送 JSON 响应	{"http_status_code": 200, "code": 200507, "message": "用户名已存在", "data": null}
+2024-09-24T22:50:15.582+0800	INFO	userService/userService.go:30	获取用户成功	{"username": "ximo1"}
+2024-09-24T22:50:15.630+0800	INFO	userService/userService.go:18	密码验证成功
+2024-09-24T22:50:15.630+0800	INFO	utils/token.go:43	JWT token 生成成功	{"user_id": 1}
+2024-09-24T22:50:15.630+0800	INFO	utils/jsonResponse.go:16	发送 JSON 响应	{"http_status_code": 200, "code": 200, "message": "success", "data": {"token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJleHAiOjE3MjcyMTEwMTUsIm5iZiI6MTcyNzE4OTQxNSwiaWF0IjoxNzI3MTg5NDE1fQ.89ABpJykJ5Zle9Z6bSulrERjLP5Wi3YoVOxN8uhK9sk"}}
+2024-09-24T22:50:15.630+0800	INFO	userController/login.go:69	用户登录成功	{"username": "ximo1"}

@@ -7,30 +7,34 @@ import (
 	"regexp"
 
 	"github.com/gin-gonic/gin"
+	"go.uber.org/zap"
 	"gorm.io/gorm"
 )
 
-type RegDate struct {
+type RegData struct {
 	Username string `json:"username" binding:"required"`
 	Password string `json:"password" binding:"required"`
 }
 
 func Register(c *gin.Context) {
-	var data RegDate
+	var data RegData
 	err := c.ShouldBindJSON(&data)
 	if err != nil {
+		zap.L().Error("请求数据绑定失败", zap.Error(err))
 		utils.JsonErrorResponse(c, 200506, "参数错误")
 		return
 	}
 
 	// 用户名校验
 	if !isUsernameValid(data.Username) {
+		zap.L().Error("用户名不符合规范", zap.String("username", data.Username))
 		utils.JsonErrorResponse(c, 200505, "用户名不符合规范")
 		return
 	}
 
 	// 密码校验
 	if !isPasswordValid(data.Password) {
+		zap.L().Error("密码不符合规范", zap.String("password", data.Password))
 		utils.JsonErrorResponse(c, 200505, "密码不符合规范")
 		return
 	}
@@ -38,9 +42,11 @@ func Register(c *gin.Context) {
 	// 判断用户是否已经注册
 	_, err = userService.GetUserByUsername(data.Username)
 	if err == nil {
+		zap.L().Error("用户名已存在", zap.String("username", data.Username))
 		utils.JsonErrorResponse(c, 200507, "用户名已存在")
 		return
 	} else if err != gorm.ErrRecordNotFound {
+		zap.L().Error("查询用户信息失败", zap.Error(err))
 		utils.JsonInternalServerErrorResponse(c)
 		return
 	}
@@ -48,14 +54,16 @@ func Register(c *gin.Context) {
 	// 注册用户
 	err = userService.Register(models.User{
 		Username: data.Username,
-		Nickname: data.Username, // 昵称默认为用户名
 		Password: data.Password,
 	})
 	if err != nil {
+		zap.L().Error("注册用户失败", zap.Error(err))
 		utils.JsonInternalServerErrorResponse(c)
 		return
 	}
 
+	// 成功注册用户
+	zap.L().Info("用户注册成功", zap.String("username", data.Username))
 	utils.JsonSuccessResponse(c, nil)
 }
 

@@ -6,6 +6,7 @@ import (
 	"ConfessionWall/app/utils"
 
 	"github.com/gin-gonic/gin"
+	"go.uber.org/zap"
 )
 
 type GetListResponse struct {
@@ -19,25 +20,25 @@ type Confession struct {
 }
 
 func GetPostList(c *gin.Context) {
-	// TODO: 黑名单
-	// id := c.GetUint("user_id")
-
+	// 获取帖子列表
 	postList, err := postService.GetPostList()
 	if err != nil {
+		zap.L().Error("获取帖子列表失败", zap.Error(err))
 		utils.JsonInternalServerErrorResponse(c)
 		return
 	}
 
 	// 创建一个Confession数组
 	// 遍历postList，将信息填入数组中
-	// 最后将数组序列化为json响应
-	var confessionList []Confession = make([]Confession, 0)
+	var confessionList []Confession
 	for _, post := range postList {
 		nickname := ""
 		if !post.Unnamed {
 			user, err := userService.GetUserByID(post.User)
 			if err == nil { // 如果能获取到用户
 				nickname = user.Nickname
+			} else {
+				zap.L().Error("获取用户信息失败", zap.Uint("user_id", post.User), zap.Error(err))
 			}
 		}
 		confession := Confession{
@@ -48,6 +49,8 @@ func GetPostList(c *gin.Context) {
 		confessionList = append(confessionList, confession)
 	}
 
+	// 成功获取帖子列表
+	zap.L().Info("获取帖子列表成功", zap.Int("count", len(postList)))
 	utils.JsonSuccessResponse(c, GetListResponse{
 		ConfessionList: confessionList,
 	})
