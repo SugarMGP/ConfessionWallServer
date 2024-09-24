@@ -38,7 +38,7 @@ func Register(c *gin.Context) {
 	// 判断用户是否已经注册
 	_, err = userService.GetUserByUsername(data.Username)
 	if err == nil {
-		utils.JsonErrorResponse(c, 200501, "用户名已存在")
+		utils.JsonErrorResponse(c, 200507, "用户名已存在")
 		return
 	} else if err != gorm.ErrRecordNotFound {
 		utils.JsonInternalServerErrorResponse(c)

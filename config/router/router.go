@@ -10,7 +10,7 @@ func Init(r *gin.Engine) {
 	api := r.Group("/api")
 	{
 		api.POST("/user/reg", userController.Register)
-		// api.POST("/user/login", userController.Login)
+		api.POST("/user/login", userController.Login)
 		// api.POST("/user/reg", userController.Register)
 		// api.GET("/student/post", postController.GetAllPosts)
 
