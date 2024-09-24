@@ -2,6 +2,7 @@ package utils
 
 import (
 	"github.com/gin-gonic/gin"
+	"go.uber.org/zap"
 )
 
 func JsonResponse(c *gin.Context, httpStatusCode int, code int, msg string, data interface{}) {
@@ -10,6 +11,14 @@ func JsonResponse(c *gin.Context, httpStatusCode int, code int, msg string, data
 		"msg":  msg,
 		"data": data,
 	})
+
+	// 记录响应信息
+	zap.L().Info("发送 JSON 响应",
+		zap.Int("http_status_code", httpStatusCode),
+		zap.Int("code", code),
+		zap.String("message", msg),
+		zap.Any("data", data),
+	)
 }
 
 func JsonSuccessResponse(c *gin.Context, data interface{}) {
