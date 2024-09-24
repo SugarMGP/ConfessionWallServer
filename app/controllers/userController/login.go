@@ -1,7 +1,6 @@
 package userController
 
 import (
-	"ConfessionWall/app/models"
 	"ConfessionWall/app/services/userService"
 	"ConfessionWall/app/utils"
 
@@ -28,8 +27,7 @@ func Login(c *gin.Context) {
 	}
 
 	// 判断用户是否存在并获取用户信息
-	var user *models.User
-	user, err = userService.GetUserByUsername(data.Username)
+	user, err := userService.GetUserByUsername(data.Username)
 	if err != nil {
 		if err == gorm.ErrRecordNotFound {
 			utils.JsonErrorResponse(c, 200501, "用户不存在")

@@ -8,16 +8,14 @@ import (
 )
 
 func VerifyPassword(password, hashedPassword string) error {
+	// 将密码与hash密码进行比较
 	return bcrypt.CompareHashAndPassword([]byte(hashedPassword), []byte(password))
 }
 
-func GetUserByUsername(username string) (*models.User, error) {
-	var user models.User
+func GetUserByUsername(username string) (user models.User, err error) {
 	result := database.DB.Where("username = ?", username).First(&user)
-	if result.Error != nil {
-		return nil, result.Error
-	}
-	return &user, nil
+	err = result.Error
+	return
 }
 
 func Register(user models.User) error {
@@ -30,11 +28,8 @@ func Register(user models.User) error {
 	return result.Error
 }
 
-func GetUserByID(id uint) (*models.User, error) {
-	var user models.User
+func GetUserByID(id uint) (user models.User, err error) {
 	result := database.DB.Where("id = ?", id).First(&user)
-	if result.Error != nil {
-		return nil, result.Error
-	}
-	return &user, nil
+	err = result.Error
+	return
 }
