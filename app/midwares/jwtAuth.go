@@ -33,5 +33,4 @@ func JWTAuth(c *gin.Context) {
 	// 将 user_id 重新写入 gin.Context 对象中
 	c.Set("user_id", id)
 	zap.L().Info("JWT认证成功", zap.Uint("user_id", id))
-	c.Next() // 继续执行下一个中间件或路由处理器
 }

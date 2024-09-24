@@ -42,12 +42,11 @@ func NewPost(c *gin.Context) {
 	}
 
 	// 新建帖子
-	post := models.Post{
+	err = postService.NewPost(models.Post{
 		Content: data.Content,
 		User:    user.ID,
 		Unnamed: data.Unnamed,
-	}
-	err = postService.NewPost(post)
+	})
 	if err != nil {
 		zap.L().Error("新建帖子失败", zap.Uint("user_id", id), zap.Error(err))
 		utils.JsonInternalServerErrorResponse(c)
