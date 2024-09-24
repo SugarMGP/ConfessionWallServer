@@ -30,7 +30,7 @@ func GetPostList(c *gin.Context) {
 
 	// 创建一个Confession数组
 	// 遍历postList，将信息填入数组中
-	var confessionList []Confession
+	confessionList := make([]Confession, 0)
 	for _, post := range postList {
 		nickname := ""
 		if !post.Unnamed {

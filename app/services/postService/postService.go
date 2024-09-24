@@ -18,7 +18,8 @@ func NewPost(post models.Post) error {
 	return nil
 }
 
-func GetPostList() (posts []models.Post, err error) {
+func GetPostList() ([]models.Post, error) {
+	var posts []models.Post
 	result := database.DB.Find(&posts)
 	if result.Error != nil {
 		zap.L().Error("获取帖子列表失败", zap.Error(result.Error))
@@ -29,7 +30,8 @@ func GetPostList() (posts []models.Post, err error) {
 	return posts, nil
 }
 
-func GetPostByID(id uint) (post models.Post, err error) {
+func GetPostByID(id uint) (models.Post, error) {
+	var post models.Post
 	result := database.DB.Where("id = ?", id).First(&post)
 	if result.Error != nil {
 		zap.L().Error("获取帖子失败", zap.Uint("post_id", id), zap.Error(result.Error))
