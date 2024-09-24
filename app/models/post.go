@@ -5,7 +5,7 @@ import "time"
 type Post struct {
 	ID        uint      `json:"post_id"`
 	Content   string    `json:"content"`
-	User      uint      `json:"user_id"`
-	Unnamed   bool      `json:"unnamed"`
-	CreatedAt time.Time `json:"time"`
+	User      uint      `json:"-"`
+	Unnamed   bool      `json:"-"`
+	CreatedAt time.Time `json:"-"`
 }
