@@ -1,0 +1,29 @@
+version: 2
+
+builds:
+  # 运行构建期间的环境变量
+  - env:
+      - CGO_ENABLED=0
+
+    # GOOS 构建列表
+    goos:
+      - linux
+      - windows
+
+    # GOARCH 构建系结构
+    # 更多内容，请参考: https://golang.org/doc/install/source#environment
+    goarch:
+      - 386
+      - amd64
+      - arm
+      - arm64
+
+archives:
+  # 是否打包进存档文件.
+  - wrap_in_directory: true
+
+    # 你想加入到 archive，匹配的 files/globs，.
+    files:
+      - LICENSE
+      - README.md
+      - config.yaml
