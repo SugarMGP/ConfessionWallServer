@@ -7,8 +7,8 @@ import (
 )
 
 func JWTAuth(c *gin.Context) {
-	// 通过 header 中的 token 来认证
-	token := c.Request.Header.Get("token")
+	// 通过 header 中的 Authorization 来认证
+	token := c.Request.Header.Get("Authorization")
 	if token == "" { // 没有携带 token
 		utils.JsonErrorResponse(c, 200502, "无权限访问")
 		c.Abort() // 中止当前请求
