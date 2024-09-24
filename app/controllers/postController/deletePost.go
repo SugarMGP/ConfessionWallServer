@@ -9,7 +9,7 @@ import (
 )
 
 type DeleteResponse struct {
-	PostID uint `json:"post_id"`
+	PostID uint `json:"post_id" binding:"required"`
 }
 
 func DeletePost(c *gin.Context) {

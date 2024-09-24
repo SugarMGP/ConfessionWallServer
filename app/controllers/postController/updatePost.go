@@ -10,8 +10,8 @@ import (
 )
 
 type UpdatePostData struct {
-	PostID  uint   `json:"post_id"`
-	Content string `json:"content"`
+	PostID  uint   `json:"post_id" binding:"required"`
+	Content string `json:"content" binding:"required"`
 }
 
 func UpdatePost(c *gin.Context) {

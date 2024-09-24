@@ -48,6 +48,7 @@ func Register(c *gin.Context) {
 	// 注册用户
 	err = userService.Register(models.User{
 		Username: data.Username,
+		Nickname: data.Username, // 昵称默认为用户名
 		Password: data.Password,
 	})
 	if err != nil {

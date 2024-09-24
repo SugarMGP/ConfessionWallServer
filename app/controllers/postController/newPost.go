@@ -12,7 +12,7 @@ import (
 
 type NewPostData struct {
 	Content string `json:"content" binding:"required"`
-	Unnamed bool   `json:"unnamed" binding:"required"`
+	Unnamed bool   `json:"unnamed"`
 }
 
 func NewPost(c *gin.Context) {
@@ -20,7 +20,7 @@ func NewPost(c *gin.Context) {
 	var data NewPostData
 	err := c.ShouldBindJSON(&data)
 	if err != nil {
-		utils.JsonErrorResponse(c, 200506, "参数错误")
+		utils.JsonErrorResponse(c, 200506, err.Error())
 		return
 	}
 
