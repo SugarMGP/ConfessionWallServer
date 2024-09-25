@@ -1,6 +1,7 @@
 package router
 
 import (
+	"ConfessionWall/app/controllers/blockController"
 	"ConfessionWall/app/controllers/postController"
 	"ConfessionWall/app/controllers/userController"
 	"ConfessionWall/app/midwares"
@@ -18,5 +19,7 @@ func Init(r *gin.Engine) {
 		api.GET("/confession", midwares.JWTAuth, postController.GetPostList)
 		api.PUT("/confession", midwares.JWTAuth, postController.UpdatePost)
 		api.DELETE("/confession", midwares.JWTAuth, postController.DeletePost)
+
+		api.POST("/blacklist", midwares.JWTAuth, blockController.NewBlock)
 	}
 }

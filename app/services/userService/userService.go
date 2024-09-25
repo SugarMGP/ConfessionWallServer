@@ -19,14 +19,10 @@ func VerifyPassword(password, hashedPassword string) error {
 	return nil
 }
 
-func GetUserByUsername(username string) (models.User, error) {
-	var user models.User
+func GetUserByUsername(username string) (user models.User, err error) {
 	result := database.DB.Where("username = ?", username).First(&user)
-	if result.Error != nil {
-		zap.L().Error("获取用户失败", zap.String("username", username), zap.Error(result.Error))
-		return models.User{}, result.Error
-	}
-	return user, nil
+	err = result.Error
+	return
 }
 
 func Register(user models.User) error {
@@ -42,19 +38,11 @@ func Register(user models.User) error {
 	user.Nickname = "用户" + hashedUsername[:8]
 
 	result := database.DB.Create(&user)
-	if result.Error != nil {
-		zap.L().Error("注册用户失败", zap.String("username", user.Username), zap.Error(result.Error))
-		return result.Error
-	}
-	return nil
+	return result.Error
 }
 
-func GetUserByID(id uint) (models.User, error) {
-	var user models.User
+func GetUserByID(id uint) (user models.User, err error) {
 	result := database.DB.Where("id = ?", id).First(&user)
-	if result.Error != nil {
-		zap.L().Error("获取用户失败", zap.Uint("user_id", id), zap.Error(result.Error))
-		return models.User{}, result.Error
-	}
-	return user, nil
+	err = result.Error
+	return
 }
