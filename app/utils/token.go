@@ -35,11 +35,7 @@ func GenerateToken(userID uint) (string, error) {
 	}
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 	tokenString, err := token.SignedString([]byte(config.Config.GetString("jwt.secret")))
-	if err != nil {
-		zap.L().Error("生成 Token 失败", zap.Error(err))
-		return "", err
-	}
-	return tokenString, nil
+	return tokenString, err
 }
 
 // ExtractToken 用于从 JWT token 中提取 user_id
