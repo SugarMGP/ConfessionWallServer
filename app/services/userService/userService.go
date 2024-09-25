@@ -14,8 +14,6 @@ func VerifyPassword(password, hashedPassword string) error {
 		zap.L().Error("密码验证失败", zap.Error(err))
 		return err
 	}
-
-	zap.L().Info("密码验证成功")
 	return nil
 }
 
@@ -26,8 +24,6 @@ func GetUserByUsername(username string) (models.User, error) {
 		zap.L().Error("获取用户失败", zap.String("username", username), zap.Error(result.Error))
 		return models.User{}, result.Error
 	}
-
-	zap.L().Info("获取用户成功", zap.String("username", username))
 	return user, nil
 }
 
@@ -44,8 +40,6 @@ func Register(user models.User) error {
 		zap.L().Error("注册用户失败", zap.String("username", user.Username), zap.Error(result.Error))
 		return result.Error
 	}
-
-	zap.L().Info("注册用户成功", zap.String("username", user.Username))
 	return nil
 }
 
@@ -56,7 +50,5 @@ func GetUserByID(id uint) (models.User, error) {
 		zap.L().Error("获取用户失败", zap.Uint("user_id", id), zap.Error(result.Error))
 		return models.User{}, result.Error
 	}
-
-	zap.L().Info("获取用户成功", zap.Uint("user_id", id))
 	return user, nil
 }

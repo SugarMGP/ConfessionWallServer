@@ -32,7 +32,7 @@ func NewPost(c *gin.Context) {
 	user, err := userService.GetUserByID(id)
 	if err != nil {
 		if err == gorm.ErrRecordNotFound {
-			zap.L().Error("用户不存在", zap.Uint("user_id", id))
+			zap.L().Debug("用户不存在", zap.Uint("user_id", id))
 			utils.JsonErrorResponse(c, 200508, "用户不存在")
 		} else {
 			zap.L().Error("查询用户信息失败", zap.Uint("user_id", id), zap.Error(err))

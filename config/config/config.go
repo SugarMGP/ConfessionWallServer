@@ -8,6 +8,7 @@ import (
 
 var Config = viper.New()
 
+// 初始化配置
 func init() {
 	Config.SetConfigName("config")
 	Config.SetConfigType("yaml")

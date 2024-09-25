@@ -27,14 +27,14 @@ func Register(c *gin.Context) {
 
 	// 用户名校验
 	if !isUsernameValid(data.Username) {
-		zap.L().Error("用户名不符合规范", zap.String("username", data.Username))
+		zap.L().Debug("用户名不符合规范", zap.String("username", data.Username))
 		utils.JsonErrorResponse(c, 200505, "用户名不符合规范")
 		return
 	}
 
 	// 密码校验
 	if !isPasswordValid(data.Password) {
-		zap.L().Error("密码不符合规范", zap.String("password", data.Password))
+		zap.L().Debug("密码不符合规范", zap.String("password", data.Password))
 		utils.JsonErrorResponse(c, 200505, "密码不符合规范")
 		return
 	}
@@ -42,7 +42,7 @@ func Register(c *gin.Context) {
 	// 判断用户是否已经注册
 	_, err = userService.GetUserByUsername(data.Username)
 	if err == nil {
-		zap.L().Error("用户名已存在", zap.String("username", data.Username))
+		zap.L().Debug("用户名已存在", zap.String("username", data.Username))
 		utils.JsonErrorResponse(c, 200507, "用户名已存在")
 		return
 	} else if err != gorm.ErrRecordNotFound {

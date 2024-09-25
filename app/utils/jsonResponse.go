@@ -13,7 +13,7 @@ func JsonResponse(c *gin.Context, httpStatusCode int, code int, msg string, data
 	})
 
 	// 记录响应信息
-	zap.L().Info("发送 JSON 响应",
+	zap.L().Debug("发送 JSON 响应",
 		zap.Int("http_status_code", httpStatusCode),
 		zap.Int("code", code),
 		zap.String("message", msg),

@@ -3,8 +3,8 @@ package database
 import (
 	"ConfessionWall/config/config"
 	"fmt"
-	"log"
 
+	"go.uber.org/zap"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 )
@@ -22,12 +22,12 @@ func Init() {
 	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
 
 	if err != nil {
-		log.Fatal("Database connect failed: ", err)
+		zap.L().Fatal("Database connect failed", zap.Error(err))
 	}
 
 	err = autoMigrate(db)
 	if err != nil {
-		log.Fatal("Database migrate failed: ", err)
+		zap.L().Fatal("Database migrate failed", zap.Error(err))
 	}
 
 	DB = db

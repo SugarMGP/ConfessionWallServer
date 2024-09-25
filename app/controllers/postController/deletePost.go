@@ -29,7 +29,7 @@ func DeletePost(c *gin.Context) {
 	post, err := postService.GetPostByID(data.PostID)
 	if err != nil {
 		if err == gorm.ErrRecordNotFound {
-			zap.L().Error("帖子不存在", zap.Uint("post_id", data.PostID))
+			zap.L().Debug("帖子不存在", zap.Uint("post_id", data.PostID))
 			utils.JsonErrorResponse(c, 200508, "帖子不存在")
 		} else {
 			zap.L().Error("获取帖子信息失败", zap.Uint("post_id", data.PostID), zap.Error(err))
@@ -40,7 +40,7 @@ func DeletePost(c *gin.Context) {
 
 	// 检查用户是否有权限删除帖子
 	if post.User != id {
-		zap.L().Error("请求的用户与发帖人不符", zap.Uint("user_id", id), zap.Uint("post_user_id", post.User))
+		zap.L().Debug("请求的用户与发帖人不符", zap.Uint("user_id", id), zap.Uint("post_user_id", post.User))
 		utils.JsonErrorResponse(c, 200509, "请求的用户与发帖人不符")
 		return
 	}
