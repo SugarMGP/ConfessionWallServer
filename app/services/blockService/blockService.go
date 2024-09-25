@@ -1,0 +1,17 @@
+package blockService
+
+import (
+	"ConfessionWall/app/models"
+	"ConfessionWall/config/database"
+)
+
+func NewBlock(block models.Block) error {
+	result := database.DB.Create(&block)
+	return result.Error
+}
+
+func GetBlockByID(id uint, target uint) (block models.Block, err error) {
+	result := database.DB.Where("user_id = ?", id).Where("target_id = ?", target).First(&block)
+	err = result.Error
+	return
+}

@@ -54,6 +54,6 @@ func DeletePost(c *gin.Context) {
 	}
 
 	// 成功删除帖子
-	zap.L().Info("帖子删除成功", zap.Uint("post_id", data.PostID), zap.Uint("user_id", id))
+	zap.L().Info("帖子删除成功", zap.Uint("user_id", id), zap.Uint("post_id", data.PostID))
 	utils.JsonSuccessResponse(c, nil)
 }
