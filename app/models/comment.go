@@ -5,10 +5,9 @@ package models
 import "time"
 
 type Comment struct {
-	ID        int       `gorm:"primaryKey;autoIncrement"`
-	PostID    int       `gorm:"not null"`
-	UserID    int       `gorm:"not null"`
-	Content   string    `gorm:"not null"`
+	PostID    int       
+	UserID    int       
+	Content   string    
 	CreatedAt time.Time `gorm:"not null"`
 	UpdatedAt time.Time `gorm:"not null"`
 }
