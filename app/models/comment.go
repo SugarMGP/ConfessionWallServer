@@ -8,6 +8,6 @@ type Comment struct {
 	PostID    int       
 	UserID    int       
 	Content   string    
-	CreatedAt time.Time `gorm:"not null"`
-	UpdatedAt time.Time `gorm:"not null"`
+	CreatedAt time.Time 
+	UpdatedAt time.Time 
 }
