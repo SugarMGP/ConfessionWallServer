@@ -1,9 +1,13 @@
 package models
 
+// Comment 评论模型
+
 import "time"
 
 type Comment struct {
-	Username  string    `json:"-"`
-	Comment   string    `json:"comment"`
-	CreatedAt time.Time `json:"-"`
+	PostID    int       
+	UserID    int       
+	Content   string    
+	CreatedAt time.Time 
+	UpdatedAt time.Time 
 }

@@ -8,4 +8,5 @@ type Post struct {
 	User      uint      `json:"-"`
 	Unnamed   bool      `json:"-"`
 	CreatedAt time.Time `json:"-"`
+	UpdatedAt time.Time `json:"-"`
 }
