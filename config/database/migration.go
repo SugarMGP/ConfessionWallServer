@@ -11,6 +11,7 @@ func autoMigrate(db *gorm.DB) error {
 		&models.User{},
 		&models.Post{},
 		&models.Block{},
+		&models.Comment{},
 	)
 	return err
 }
