@@ -12,11 +12,7 @@ import (
 
 func VerifyPassword(password, hashedPassword string) error {
 	err := bcrypt.CompareHashAndPassword([]byte(hashedPassword), []byte(password))
-	if err != nil {
-		zap.L().Error("密码验证失败", zap.Error(err))
-		return err
-	}
-	return nil
+	return err
 }
 
 func GetUserByUsername(username string) (user models.User, err error) {
