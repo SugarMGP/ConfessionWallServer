@@ -21,3 +21,8 @@ func GetBlocksByUserID(id uint) (blocks []models.Block, err error) {
 	err = result.Error
 	return
 }
+
+func DeleteBlock(user uint, target uint) error {
+	result := database.DB.Where("user_id = ?", user).Where("target_id = ?", target).Delete(&models.Block{})
+	return result.Error
+}
