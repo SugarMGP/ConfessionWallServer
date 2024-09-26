@@ -5,6 +5,7 @@ import (
 	"ConfessionWall/app/services/postService"
 	"ConfessionWall/app/services/userService"
 	"ConfessionWall/app/utils"
+	"time"
 
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
@@ -45,6 +46,14 @@ func GetPostList(c *gin.Context) {
 		for _, block := range blocks {
 			if block.TargetID == post.User { // 如果用户被屏蔽
 				continue
+			}
+		}
+
+		if !post.PostTime.IsZero() {
+			if post.PostTime.After(time.Now()) {
+				continue
+			} else {
+				post.PostTime = time.Time{}
 			}
 		}
 
