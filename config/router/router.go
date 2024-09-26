@@ -17,6 +17,7 @@ func Init(r *gin.Engine) {
 
 		api.POST("/confession", midwares.JWTAuth, postController.NewPost)
 		api.GET("/confession", midwares.JWTAuth, postController.GetPostList)
+		api.GET("/my_confession", midwares.JWTAuth, postController.GetMyPostList)
 		api.PUT("/confession", midwares.JWTAuth, postController.UpdatePost)
 		api.DELETE("/confession", midwares.JWTAuth, postController.DeletePost)
 
