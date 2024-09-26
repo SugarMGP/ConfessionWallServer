@@ -15,3 +15,9 @@ func GetBlockByID(id uint, target uint) (block models.Block, err error) {
 	err = result.Error
 	return
 }
+
+func GetBlocksByUserID(id uint) (blocks []models.Block, err error) {
+	result := database.DB.Where("user_id = ?", id).Find(&blocks)
+	err = result.Error
+	return
+}

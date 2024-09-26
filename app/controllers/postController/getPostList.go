@@ -1,6 +1,7 @@
 package postController
 
 import (
+	"ConfessionWall/app/services/blockService"
 	"ConfessionWall/app/services/postService"
 	"ConfessionWall/app/services/userService"
 	"ConfessionWall/app/utils"
@@ -20,6 +21,8 @@ type Confession struct {
 }
 
 func GetPostList(c *gin.Context) {
+	id := c.GetUint("user_id")
+
 	// 获取帖子列表
 	postList, err := postService.GetPostList()
 	if err != nil {
@@ -28,10 +31,23 @@ func GetPostList(c *gin.Context) {
 		return
 	}
 
+	blocks, err := blockService.GetBlocksByUserID(id)
+	if err != nil {
+		zap.L().Error("获取拉黑列表失败", zap.Error(err))
+		utils.JsonInternalServerErrorResponse(c)
+		return
+	}
+
 	// 创建一个Confession数组
 	// 遍历postList，将信息填入数组中
 	confessionList := make([]Confession, 0)
 	for _, post := range postList {
+		for _, block := range blocks {
+			if block.TargetID == post.User { // 如果用户被屏蔽
+				continue
+			}
+		}
+
 		nickname := ""
 		if !post.Unnamed {
 			user, err := userService.GetUserByID(post.User)
@@ -41,6 +57,7 @@ func GetPostList(c *gin.Context) {
 				zap.L().Error("获取用户信息失败", zap.Uint("user_id", post.User), zap.Error(err))
 			}
 		}
+
 		confession := Confession{
 			ID:       post.ID,
 			Nickname: nickname,
