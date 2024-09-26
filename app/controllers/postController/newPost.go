@@ -3,12 +3,10 @@ package postController
 import (
 	"ConfessionWall/app/models"
 	"ConfessionWall/app/services/postService"
-	"ConfessionWall/app/services/userService"
 	"ConfessionWall/app/utils"
 
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
-	"gorm.io/gorm"
 )
 
 type NewPostData struct {
@@ -28,23 +26,10 @@ func NewPost(c *gin.Context) {
 		return
 	}
 
-	// 检查用户是否存在
-	user, err := userService.GetUserByID(id)
-	if err != nil {
-		if err == gorm.ErrRecordNotFound {
-			zap.L().Debug("用户不存在", zap.Uint("user_id", id))
-			utils.JsonErrorResponse(c, 200508, "用户不存在")
-		} else {
-			zap.L().Error("查询用户信息失败", zap.Uint("user_id", id), zap.Error(err))
-			utils.JsonInternalServerErrorResponse(c)
-		}
-		return
-	}
-
 	// 新建帖子
 	err = postService.NewPost(models.Post{
 		Content: data.Content,
-		User:    user.ID,
+		User:    id,
 		Unnamed: data.Unnamed,
 	})
 	if err != nil {

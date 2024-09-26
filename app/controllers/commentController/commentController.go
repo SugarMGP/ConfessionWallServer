@@ -1,46 +1,42 @@
 package commentController
 
 import (
+	"ConfessionWall/app/models"
 	"ConfessionWall/app/services/commentService"
 	"ConfessionWall/app/utils"
-	"strconv"
 
 	"github.com/gin-gonic/gin"
+	"go.uber.org/zap"
 )
 
-type CommentController struct {
-	commentService *commentService.CommentService
-}
-
-func NewCommentController(commentService *commentService.CommentService) *CommentController {
-	return &CommentController{
-		commentService: commentService,
-	}
+type CommentData struct {
+	PostID  uint   `json:"post_id"`
+	Content string `json:"content"`
 }
 
 // CreateCommentHandler 创建评论
-func (cc *CommentController) CreateComment(ctx *gin.Context) {
-	postID, err := strconv.Atoi(ctx.Param("postID"))
+func CreateComment(c *gin.Context) {
+	id := c.GetUint("user_id")
+	var data CommentData
+	err := c.ShouldBindJSON(&data)
 	if err != nil {
-		utils.JsonErrorResponse(ctx, 200511, "无效的帖子ID")
-		return
-	}
-	var req struct {
-		UserID  int    `json:"user_id"`
-		Content string `json:"content"`
-	}
-	if err := ctx.ShouldBindJSON(&req); err != nil {
-		utils.JsonErrorResponse(ctx, 200511, "无效的请求参数")
+		zap.L().Error("请求数据绑定失败", zap.Error(err))
+		utils.JsonErrorResponse(c, 200506, "参数错误")
 		return
 	}
 
-	comment, err := cc.commentService.CreateComment(uint(postID), uint(req.UserID), req.Content)
-	if err != nil {
-		utils.JsonErrorResponse(ctx, 200511, "创建评论失败")
-		return
-	}
-
-	utils.JsonSuccessResponse(ctx, gin.H{
-		"comment_id": comment.ID,
+	err = commentService.NewComment(models.Comment{
+		PostID:  data.PostID,
+		UserID:  id,
+		Content: data.Content,
 	})
+	if err != nil {
+		zap.L().Error("发布评论失败", zap.Uint("user_id", id), zap.Error(err))
+		utils.JsonInternalServerErrorResponse(c)
+		return
+	}
+
+	// 成功创建帖子
+	zap.L().Info("发布评论成功", zap.Uint("user_id", id), zap.String("content", data.Content))
+	utils.JsonSuccessResponse(c, nil)
 }

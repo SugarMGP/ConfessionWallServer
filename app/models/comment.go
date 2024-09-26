@@ -9,8 +9,8 @@ import (
 )
 
 type Comment struct {
-	PostID    int
-	UserID    int
+	PostID    uint
+	UserID    uint
 	Content   string
 	CreatedAt time.Time
 	UpdatedAt time.Time
