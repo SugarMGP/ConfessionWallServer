@@ -2,7 +2,6 @@ package postController
 
 import (
 	"ConfessionWall/app/services/postService"
-	"ConfessionWall/app/services/userService"
 	"ConfessionWall/app/utils"
 
 	"github.com/gin-gonic/gin"
@@ -24,19 +23,6 @@ func UpdatePost(c *gin.Context) {
 	if err != nil {
 		zap.L().Error("请求数据绑定失败", zap.Error(err))
 		utils.JsonErrorResponse(c, 200506, "参数错误")
-		return
-	}
-
-	// 验证用户是否存在
-	_, err = userService.GetUserByID(id)
-	if err != nil {
-		if err == gorm.ErrRecordNotFound {
-			zap.L().Debug("用户不存在", zap.Uint("user_id", id))
-			utils.JsonErrorResponse(c, 200508, "用户不存在")
-		} else {
-			zap.L().Error("查询用户信息失败", zap.Uint("user_id", id), zap.Error(err))
-			utils.JsonInternalServerErrorResponse(c)
-		}
 		return
 	}
 

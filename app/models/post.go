@@ -11,6 +11,7 @@ type Post struct {
 	Content   string         `json:"content"`
 	User      uint           `json:"-"`
 	Unnamed   bool           `json:"unnamed"`
+	PostTime  time.Time      `json:"-"`
 	CreatedAt time.Time      `json:"-"`
 	UpdatedAt time.Time      `json:"-"`
 	DeletedAt gorm.DeletedAt `json:"-"`

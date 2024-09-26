@@ -23,11 +23,15 @@ func Init() {
 
 	if err != nil {
 		zap.L().Fatal("Database connect failed", zap.Error(err))
+	} else {
+		zap.L().Info("Database connect success")
 	}
 
 	err = autoMigrate(db)
 	if err != nil {
 		zap.L().Fatal("Database migrate failed", zap.Error(err))
+	} else {
+		zap.L().Info("Database migrate success")
 	}
 
 	DB = db
