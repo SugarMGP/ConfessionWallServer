@@ -2,6 +2,7 @@ package router
 
 import (
 	"ConfessionWall/app/controllers/blockController"
+	"ConfessionWall/app/controllers/commentController"
 	"ConfessionWall/app/controllers/postController"
 	"ConfessionWall/app/controllers/userController"
 	"ConfessionWall/app/midwares"
@@ -22,5 +23,11 @@ func Init(r *gin.Engine) {
 		api.DELETE("/confession", midwares.JWTAuth, postController.DeletePost)
 
 		api.POST("/blacklist", midwares.JWTAuth, blockController.NewBlock)
+		confession := api.Group("/confession")
+		{
+			confession.POST("/comment", midwares.JWTAuth, commentController.NewComment)
+			confession.GET("/comment", midwares.JWTAuth, commentController.GetCommentsByPostID)
+			confession.DELETE("/comment", midwares.JWTAuth, commentController.DeleteComment)
+		}
 	}
 }
