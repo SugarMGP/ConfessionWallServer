@@ -43,10 +43,16 @@ func GetPostList(c *gin.Context) {
 	// 遍历postList，将信息填入数组中
 	confessionList := make([]Confession, 0)
 	for _, post := range postList {
+		// 判断是否被屏蔽
+		blocked := false
 		for _, block := range blocks {
-			if block.TargetID == post.User { // 如果用户被屏蔽
-				continue
+			if block.TargetID == post.User {
+				blocked = true
+				break
 			}
+		}
+		if blocked {
+			continue
 		}
 
 		if post.PostTime.After(time.Now()) {
