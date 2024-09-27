@@ -49,12 +49,8 @@ func GetPostList(c *gin.Context) {
 			}
 		}
 
-		if !post.PostTime.IsZero() {
-			if post.PostTime.After(time.Now()) {
-				continue
-			} else {
-				post.PostTime = time.Time{}
-			}
+		if post.PostTime.After(time.Now()) {
+			continue
 		}
 
 		nickname := ""

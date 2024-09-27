@@ -29,7 +29,7 @@ func NewPost(c *gin.Context) {
 		return
 	}
 
-	postTime := time.Time{}
+	postTime := time.Now()
 	if data.PostUnix != "" {
 		unix, err := strconv.ParseInt(data.PostUnix, 10, 64)
 		if err != nil {
