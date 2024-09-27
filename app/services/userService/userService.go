@@ -3,7 +3,7 @@ package userService
 import (
 	"ConfessionWall/app/models"
 	"ConfessionWall/config/database"
-	"crypto/sha256"
+	"crypto/md5"
 	"fmt"
 
 	"go.uber.org/zap"
@@ -30,8 +30,8 @@ func Register(user models.User) error {
 	user.Password = string(hashedPassword)
 
 	// 昵称默认为用户名的哈希值
-	hashedUsername := fmt.Sprintf("%x", sha256.Sum256([]byte(user.Username)))
-	user.Nickname = "用户" + hashedUsername[:8]
+	hashedUsername := fmt.Sprintf("%x", md5.Sum([]byte(user.Username)))
+	user.Nickname = "用户" + hashedUsername
 
 	result := database.DB.Create(&user)
 	return result.Error
