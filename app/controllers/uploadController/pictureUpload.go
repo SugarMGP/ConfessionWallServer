@@ -3,10 +3,12 @@ package uploadController
 import (
 	"ConfessionWall/app/services/uploadService"
 	"ConfessionWall/app/utils"
+	"io"
 	"os"
 	"path/filepath"
 
 	"github.com/gin-gonic/gin"
+	"github.com/h2non/filetype"
 	"go.uber.org/zap"
 )
 
@@ -19,7 +21,7 @@ func PictureUpload(c *gin.Context) {
 
 	file, err := c.FormFile("picture")
 	if err != nil {
-		zap.L().Error("图片获取失败", zap.Error(err))
+		zap.L().Error("文件获取失败", zap.Error(err))
 		utils.JsonErrorResponse(c, 200506, "参数错误")
 		return
 	}
@@ -29,18 +31,34 @@ func PictureUpload(c *gin.Context) {
 		return
 	}
 
+	// 获取文件扩展名
 	ext := filepath.Ext(file.Filename)
 
 	// 打开文件
 	src, err := file.Open()
 	if err != nil {
-		zap.L().Error("图片打开失败", zap.Error(err))
+		zap.L().Error("文件打开失败", zap.Error(err))
 		utils.JsonInternalServerErrorResponse(c)
 		return
 	}
 	defer src.Close()
 
-	hashString, err := uploadService.SumMD5(src)
+	// 读取文件内容
+	data, err := io.ReadAll(src)
+	if err != nil {
+		zap.L().Error("文件读取失败", zap.Error(err))
+		utils.JsonInternalServerErrorResponse(c)
+		return
+	}
+
+	// 检查文件类型
+	if !filetype.IsImage(data) {
+		utils.JsonErrorResponse(c, 200506, "文件类型错误")
+		return
+	}
+
+	// 计算图片哈希
+	hashString, err := uploadService.SumMD5(data)
 	if err != nil {
 		zap.L().Error("图片哈希计算失败", zap.Error(err))
 		utils.JsonInternalServerErrorResponse(c)
