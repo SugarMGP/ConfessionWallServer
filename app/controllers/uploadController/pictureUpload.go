@@ -3,9 +3,8 @@ package uploadController
 import (
 	"ConfessionWall/app/services/uploadService"
 	"ConfessionWall/app/utils"
-	"image"
-	"image/jpeg"
 	"os"
+	"path/filepath"
 
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
@@ -30,6 +29,8 @@ func PictureUpload(c *gin.Context) {
 		return
 	}
 
+	ext := filepath.Ext(file.Filename)
+
 	// 打开文件
 	src, err := file.Open()
 	if err != nil {
@@ -46,38 +47,22 @@ func PictureUpload(c *gin.Context) {
 		return
 	}
 
-	filePath := "./static/" + hashString + ".jpg"
+	filePath := "./static/" + hashString + ext
+	url := "http://" + c.Request.Host + "/static/" + hashString + ext
 
 	// 检查文件是否已存在
 	if _, err := os.Stat(filePath); err == nil {
-		return
-	}
-	output, err := os.Create(filePath)
-	if err != nil {
-		zap.L().Error("文件创建失败", zap.Error(err))
-		utils.JsonInternalServerErrorResponse(c)
-		return
-	}
-	defer output.Close()
-
-	// 解码图片
-	img, _, err := image.Decode(src)
-	if err != nil {
-		zap.L().Error("图片解码失败", zap.Error(err))
-		utils.JsonErrorResponse(c, 200512, "文件无法被解码为图片")
+		utils.JsonSuccessResponse(c, UploadResponse{
+			Url: url,
+		})
 		return
 	}
 
-	err = jpeg.Encode(output, img, &jpeg.Options{Quality: jpeg.DefaultQuality})
-	if err != nil {
-		zap.L().Error("图片编码失败", zap.Error(err))
-		utils.JsonInternalServerErrorResponse(c)
-		return
-	}
+	c.SaveUploadedFile(file, filePath)
 
 	// 成功上传图片
 	zap.L().Info("图片上传成功", zap.Uint("user_id", id), zap.String("path", filePath))
 	utils.JsonSuccessResponse(c, UploadResponse{
-		Url: "/static/" + hashString + ".jpg",
+		Url: url,
 	})
 }
