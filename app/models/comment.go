@@ -9,10 +9,10 @@ import (
 )
 
 type Comment struct {
-	ID        uint
-	PostID    uint
-	UserID    uint
-	Content   string
-	CreatedAt time.Time
-	DeletedAt gorm.DeletedAt
+	ID        uint           `json:"comment_id"`
+	PostID    uint           `json:"-"`
+	UserID    uint           `json:"user_id"`
+	Content   string         `json:"content"`
+	CreatedAt time.Time      `json:"-"`
+	DeletedAt gorm.DeletedAt `json:"-"`
 }

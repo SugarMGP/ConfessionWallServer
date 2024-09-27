@@ -24,12 +24,9 @@ func Init(r *gin.Engine) {
 		api.DELETE("/confession", midwares.JWTAuth, postController.DeletePost)
 
 		api.POST("/blacklist", midwares.JWTAuth, blockController.NewBlock)
-		confession := api.Group("/confession")
-		{
-			confession.POST("/comment", midwares.JWTAuth, commentController.NewComment)
-			confession.GET("/comment", midwares.JWTAuth, commentController.GetCommentsByPostID)
-			confession.DELETE("/comment", midwares.JWTAuth, commentController.DeleteComment)
-		}
+		api.POST("/confession/comment", midwares.JWTAuth, commentController.NewComment)
+		api.GET("/confession/comment", midwares.JWTAuth, commentController.GetCommentList)
+		api.DELETE("/confession/comment", midwares.JWTAuth, commentController.DeleteComment)
 
 		api.POST("/upload", midwares.JWTAuth, uploadController.PictureUpload)
 	}

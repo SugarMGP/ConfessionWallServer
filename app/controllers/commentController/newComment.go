@@ -11,16 +11,15 @@ import (
 	"gorm.io/gorm"
 )
 
-type CommentData struct {
+type NewCommentData struct {
 	PostID  uint   `json:"post_id"`
 	Content string `json:"content"`
 }
 
-// CreateCommentHandler 创建评论
 func NewComment(c *gin.Context) {
 	id := c.GetUint("user_id")
 
-	var data CommentData
+	var data NewCommentData
 	err := c.ShouldBindJSON(&data)
 	if err != nil {
 		zap.L().Error("请求数据绑定失败", zap.Error(err))
@@ -52,7 +51,7 @@ func NewComment(c *gin.Context) {
 		return
 	}
 
-	// 成功创建帖子
-	zap.L().Info("发布评论成功", zap.Uint("user_id", id), zap.String("content", data.Content))
+	// 成功创建评论
+	zap.L().Info("发布评论成功", zap.Uint("user_id", id), zap.Uint("post_id", data.PostID))
 	utils.JsonSuccessResponse(c, nil)
 }

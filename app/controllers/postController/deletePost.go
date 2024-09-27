@@ -9,7 +9,7 @@ import (
 	"gorm.io/gorm"
 )
 
-type DeleteResponse struct {
+type DeleteData struct {
 	PostID uint `json:"post_id" binding:"required"`
 }
 
@@ -17,7 +17,7 @@ func DeletePost(c *gin.Context) {
 	id := c.GetUint("user_id")
 
 	// 绑定请求数据
-	var data DeleteResponse
+	var data DeleteData
 	err := c.ShouldBindJSON(&data)
 	if err != nil {
 		zap.L().Error("请求数据绑定失败", zap.Error(err))
