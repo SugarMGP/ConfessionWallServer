@@ -4,6 +4,7 @@ import (
 	"ConfessionWall/app/controllers/blockController"
 	"ConfessionWall/app/controllers/commentController"
 	"ConfessionWall/app/controllers/postController"
+	"ConfessionWall/app/controllers/uploadController"
 	"ConfessionWall/app/controllers/userController"
 	"ConfessionWall/app/midwares"
 
@@ -29,5 +30,7 @@ func Init(r *gin.Engine) {
 			confession.GET("/comment", midwares.JWTAuth, commentController.GetCommentsByPostID)
 			confession.DELETE("/comment", midwares.JWTAuth, commentController.DeleteComment)
 		}
+
+		api.POST("/upload", midwares.JWTAuth, uploadController.PictureUpload)
 	}
 }
