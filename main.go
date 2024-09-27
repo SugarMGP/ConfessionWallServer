@@ -6,6 +6,7 @@ import (
 	"ConfessionWall/config/database"
 	"ConfessionWall/config/logger"
 	"ConfessionWall/config/router"
+	"os"
 
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
@@ -22,6 +23,16 @@ func main() {
 	r := gin.Default()
 	r.NoMethod(midwares.HandleNotFound) // 中间件统一处理404
 	r.NoRoute(midwares.HandleNotFound)
+
+	// 确保 static 目录存在，如果不存在则创建
+	if _, err := os.Stat("static"); os.IsNotExist(err) {
+		err := os.Mkdir("static", 0755)
+		if err != nil {
+			zap.L().Fatal("Failed to create static directory", zap.Error(err))
+		}
+	}
+	r.Static("/static", "./static") // 静态文件目录
+
 	router.Init(r)
 
 	err := r.Run()

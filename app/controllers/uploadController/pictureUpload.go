@@ -46,7 +46,7 @@ func PictureUpload(c *gin.Context) {
 		return
 	}
 
-	filePath := "./static/" + hashString + ".webp"
+	filePath := "./static/" + hashString + ".jpg"
 
 	// 检查文件是否已存在
 	if _, err := os.Stat(filePath); err == nil {
@@ -78,6 +78,6 @@ func PictureUpload(c *gin.Context) {
 	// 成功上传图片
 	zap.L().Info("图片上传成功", zap.Uint("user_id", id), zap.String("path", filePath))
 	utils.JsonSuccessResponse(c, UploadResponse{
-		Url: "/static/" + hashString + ".webp",
+		Url: "/static/" + hashString + ".jpg",
 	})
 }
