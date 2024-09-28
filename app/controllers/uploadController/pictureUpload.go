@@ -1,8 +1,9 @@
 package uploadController
 
 import (
-	"ConfessionWall/app/services/uploadService"
 	"ConfessionWall/app/utils"
+	"crypto/md5"
+	"fmt"
 	"io"
 	"os"
 	"path/filepath"
@@ -58,15 +59,10 @@ func PictureUpload(c *gin.Context) {
 	}
 
 	// 计算图片哈希
-	hashString, err := uploadService.SumMD5(data)
-	if err != nil {
-		zap.L().Error("图片哈希计算失败", zap.Error(err))
-		utils.JsonInternalServerErrorResponse(c)
-		return
-	}
+	hashString := fmt.Sprintf("%x", md5.Sum(data))
 
 	filePath := "./static/" + hashString + ext
-	url := "http://" + c.Request.Host + "/static/" + hashString + ext
+	url := "http://101.37.29.240:8080/static/" + hashString + ext
 
 	// 检查文件是否已存在
 	if _, err := os.Stat(filePath); err == nil {

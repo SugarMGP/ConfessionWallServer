@@ -5,4 +5,5 @@ type User struct {
 	Username string `json:"-"`
 	Nickname string `json:"-"`
 	Password string `json:"-"`
+	Avatar   string `json:"-"`
 }

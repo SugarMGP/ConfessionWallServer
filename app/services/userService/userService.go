@@ -31,7 +31,7 @@ func Register(user models.User) error {
 
 	// 昵称默认为用户名的哈希值
 	hashedUsername := fmt.Sprintf("%x", md5.Sum([]byte(user.Username)))
-	user.Nickname = "用户" + hashedUsername
+	user.Nickname = "用户" + hashedUsername[:12]
 
 	result := database.DB.Create(&user)
 	return result.Error
@@ -41,4 +41,14 @@ func GetUserByID(id uint) (user models.User, err error) {
 	result := database.DB.Where("id = ?", id).First(&user)
 	err = result.Error
 	return
+}
+
+func SetNickname(id uint, nickname string) error {
+	result := database.DB.Where("id = ?", id).First(&models.User{}).Update("nickname", nickname)
+	return result.Error
+}
+
+func SetAvatar(id uint, avatar string) error {
+	result := database.DB.Where("id = ?", id).First(&models.User{}).Update("avatar", avatar)
+	return result.Error
 }
