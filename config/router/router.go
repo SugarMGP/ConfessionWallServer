@@ -16,7 +16,7 @@ func Init(r *gin.Engine) {
 	r.POST("/api/user/login", userController.Login)
 
 	api := r.Group("/api")
-	api.Use(midwares.Limiter(), midwares.JWTAuth)
+	api.Use(midwares.JWTAuth)
 	{
 		api.GET("/user", userController.GetProfile)
 		api.PUT("/user", userController.SetProfile)

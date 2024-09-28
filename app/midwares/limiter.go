@@ -21,7 +21,14 @@ func Limiter() gin.HandlerFunc {
 
 	// 创建限流中间件
 	return mgin.NewMiddleware(limiter.New(store, rate), mgin.WithKeyGetter(func(c *gin.Context) string {
+		token := c.Request.Header.Get("Authorization")
+
+		// 如果没有Token，则按IP进行限流
+		if token == "" {
+			return c.ClientIP()
+		}
+
 		// 按Token进行限流
-		return c.Request.Header.Get("Authorization")
+		return token
 	}))
 }
