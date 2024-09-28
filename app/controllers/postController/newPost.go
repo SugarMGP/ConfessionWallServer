@@ -29,6 +29,12 @@ func NewPost(c *gin.Context) {
 		return
 	}
 
+	if len(data.Content) > 2000 {
+		zap.L().Debug("帖子内容过长", zap.Uint("user_id", id), zap.Int("length", len(data.Content)))
+		utils.JsonErrorResponse(c, 200512, "帖子内容过长")
+		return
+	}
+
 	postTime := time.Now()
 	if data.PostUnix != "" {
 		unix, err := strconv.ParseInt(data.PostUnix, 10, 64)

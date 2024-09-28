@@ -44,6 +44,12 @@ func UpdatePost(c *gin.Context) {
 		return
 	}
 
+	if len(data.Content) > 2000 {
+		zap.L().Debug("帖子内容过长", zap.Uint("user_id", id), zap.Int("length", len(data.Content)))
+		utils.JsonErrorResponse(c, 200512, "帖子内容过长")
+		return
+	}
+
 	// 编辑帖子
 	err = postService.UpdatePost(data.PostID, data.Content)
 	if err != nil {

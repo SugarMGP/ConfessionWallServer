@@ -27,7 +27,7 @@ func PictureUpload(c *gin.Context) {
 		return
 	}
 
-	if file.Size > 8*1024*1024 {
+	if file.Size > 4*1024*1024 {
 		utils.JsonErrorResponse(c, 200511, "文件过大")
 		return
 	}

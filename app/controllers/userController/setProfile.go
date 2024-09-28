@@ -25,6 +25,12 @@ func SetProfile(c *gin.Context) {
 	}
 
 	if data.Nickname != "" {
+		if len(data.Nickname) > 16 {
+			zap.L().Debug("用户昵称设置过长", zap.Uint("user_id", id), zap.Error(err))
+			utils.JsonErrorResponse(c, 200512, "用户昵称过长")
+			return
+		}
+
 		err = userService.SetNickname(id, data.Nickname)
 		if err != nil {
 			zap.L().Error("用户昵称设置失败", zap.Uint("user_id", id), zap.Error(err))

@@ -40,6 +40,12 @@ func NewComment(c *gin.Context) {
 		return
 	}
 
+	if len(data.Content) > 500 {
+		zap.L().Debug("评论内容过长", zap.Uint("user_id", id), zap.Int("length", len(data.Content)))
+		utils.JsonErrorResponse(c, 200512, "评论内容过长")
+		return
+	}
+
 	err = commentService.NewComment(models.Comment{
 		PostID:  data.PostID,
 		UserID:  id,
