@@ -31,7 +31,7 @@ func Register(user models.User) error {
 
 	// 昵称默认为用户名的哈希值
 	hashedUsername := fmt.Sprintf("%x", md5.Sum([]byte(user.Username)))
-	user.Nickname = "用户" + hashedUsername
+	user.Nickname = "用户" + hashedUsername[:12]
 
 	result := database.DB.Create(&user)
 	return result.Error
