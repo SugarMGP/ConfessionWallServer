@@ -21,7 +21,8 @@ func main() {
 	logger.Init(debug)
 	database.Init()
 	r := gin.Default()
-	r.NoMethod(midwares.HandleNotFound) // 中间件统一处理404
+	r.Use(midwares.Limiter())           // 使用限流中间件
+	r.NoMethod(midwares.HandleNotFound) // 使用404统一处理中间件
 	r.NoRoute(midwares.HandleNotFound)
 
 	// 确保 static 目录存在，如果不存在则创建
@@ -31,7 +32,7 @@ func main() {
 			zap.L().Fatal("Failed to create static directory", zap.Error(err))
 		}
 	}
-	r.Static("/static", "./static") // 静态文件目录
+	r.Static("/static", "./static") // 挂载静态文件目录
 
 	router.Init(r)
 
