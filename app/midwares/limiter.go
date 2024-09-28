@@ -10,15 +10,18 @@ import (
 )
 
 func Limiter() gin.HandlerFunc {
-	// 每秒五个请求
+	// 每秒两个请求
 	rate := limiter.Rate{
 		Period: 1 * time.Second,
-		Limit:  5,
+		Limit:  2,
 	}
 
 	// 内存存储
 	store := memory.NewStore()
 
 	// 创建限流中间件
-	return mgin.NewMiddleware(limiter.New(store, rate))
+	return mgin.NewMiddleware(limiter.New(store, rate), mgin.WithKeyGetter(func(c *gin.Context) string {
+		// 按Token进行限流
+		return c.Request.Header.Get("Authorization")
+	}))
 }
