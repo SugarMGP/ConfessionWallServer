@@ -21,6 +21,7 @@ func main() {
 	logger.Init(debug)
 	database.Init()
 	r := gin.Default()
+	r.ForwardedByClientIP = true        // 启用 X-Forwarded-For 头解析客户端 IP
 	r.NoMethod(midwares.HandleNotFound) // 使用404统一处理中间件
 	r.NoRoute(midwares.HandleNotFound)
 
