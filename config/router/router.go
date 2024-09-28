@@ -12,24 +12,26 @@ import (
 )
 
 func Init(r *gin.Engine) {
+	r.POST("/api/user/reg", userController.Register)
+	r.POST("/api/user/login", userController.Login)
+
 	api := r.Group("/api")
+	api.Use(midwares.Limiter(), midwares.JWTAuth)
 	{
-		api.POST("/user/reg", userController.Register)
-		api.POST("/user/login", userController.Login)
-		api.GET("/user", midwares.JWTAuth, userController.GetProfile)
-		api.PUT("/user", midwares.JWTAuth, userController.SetProfile)
+		api.GET("/user", userController.GetProfile)
+		api.PUT("/user", userController.SetProfile)
 
-		api.GET("/my_confession", midwares.JWTAuth, postController.GetMyPostList)
-		api.GET("/confession", midwares.JWTAuth, postController.GetPostList)
-		api.POST("/confession", midwares.JWTAuth, postController.NewPost)
-		api.PUT("/confession", midwares.JWTAuth, postController.UpdatePost)
-		api.DELETE("/confession", midwares.JWTAuth, postController.DeletePost)
+		api.GET("/my_confession", postController.GetMyPostList)
+		api.GET("/confession", postController.GetPostList)
+		api.POST("/confession", postController.NewPost)
+		api.PUT("/confession", postController.UpdatePost)
+		api.DELETE("/confession", postController.DeletePost)
 
-		api.POST("/blacklist", midwares.JWTAuth, blockController.NewBlock)
-		api.POST("/confession/comment", midwares.JWTAuth, commentController.NewComment)
-		api.GET("/confession/comment", midwares.JWTAuth, commentController.GetCommentList)
-		api.DELETE("/confession/comment", midwares.JWTAuth, commentController.DeleteComment)
+		api.POST("/blacklist", blockController.NewBlock)
+		api.POST("/confession/comment", commentController.NewComment)
+		api.GET("/confession/comment", commentController.GetCommentList)
+		api.DELETE("/confession/comment", commentController.DeleteComment)
 
-		api.POST("/upload", midwares.JWTAuth, uploadController.PictureUpload)
+		api.POST("/upload", uploadController.PictureUpload)
 	}
 }

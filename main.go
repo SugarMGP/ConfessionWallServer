@@ -21,7 +21,6 @@ func main() {
 	logger.Init(debug)
 	database.Init()
 	r := gin.Default()
-	r.Use(midwares.Limiter())           // 使用限流中间件
 	r.NoMethod(midwares.HandleNotFound) // 使用404统一处理中间件
 	r.NoRoute(midwares.HandleNotFound)
 
