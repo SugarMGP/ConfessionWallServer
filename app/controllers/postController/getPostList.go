@@ -19,6 +19,7 @@ type Confession struct {
 	ID       uint   `json:"post_id"`
 	Nickname string `json:"nickname"`
 	Content  string `json:"content"`
+	Avatar   string `json:"avatar"`
 }
 
 func GetPostList(c *gin.Context) {
@@ -60,10 +61,12 @@ func GetPostList(c *gin.Context) {
 		}
 
 		nickname := ""
+		avatar := ""
 		if !post.Unnamed {
 			user, err := userService.GetUserByID(post.User)
 			if err == nil { // 如果能获取到用户
 				nickname = user.Nickname
+				avatar = user.Avatar
 			} else {
 				zap.L().Error("获取用户信息失败", zap.Uint("user_id", post.User), zap.Error(err))
 			}
@@ -73,6 +76,7 @@ func GetPostList(c *gin.Context) {
 			ID:       post.ID,
 			Nickname: nickname,
 			Content:  post.Content,
+			Avatar:   avatar,
 		}
 		confessionList = append(confessionList, confession)
 	}
