@@ -6,6 +6,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
+	"gorm.io/gorm"
 )
 
 type DeleteData struct {
@@ -26,8 +27,13 @@ func DeleteComment(c *gin.Context) {
 
 	comment, err := commentService.GetCommentByID(data.CommentID)
 	if err != nil {
-		zap.L().Error("获取评论失败", zap.Error(err))
-		utils.JsonInternalServerErrorResponse(c)
+		if err == gorm.ErrRecordNotFound {
+			zap.L().Debug("评论不存在", zap.Uint("comment_id", data.CommentID))
+			utils.JsonErrorResponse(c, 200508, "评论不存在")
+		} else {
+			zap.L().Error("获取评论失败", zap.Uint("comment_id", data.CommentID), zap.Error(err))
+			utils.JsonInternalServerErrorResponse(c)
+		}
 		return
 	}
 
