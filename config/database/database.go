@@ -19,7 +19,9 @@ func Init() {
 	password := config.Config.GetString("database.password")
 
 	dsn := fmt.Sprintf("%v:%v@tcp(%v:%v)/%v?charset=utf8&parseTime=True&loc=Local", user, password, host, port, database)
-	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
+	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{
+		DisableForeignKeyConstraintWhenMigrating: true, // 关闭外键约束 提升数据库速度
+	})
 
 	if err != nil {
 		zap.L().Fatal("Database connect failed", zap.Error(err))
