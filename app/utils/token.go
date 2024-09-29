@@ -7,7 +7,6 @@ import (
 	"time"
 
 	"github.com/golang-jwt/jwt/v5"
-	"go.uber.org/zap"
 )
 
 type UserClaims struct {
@@ -21,7 +20,6 @@ var ErrTokenHandlingFailed = errors.New("token handling failed")
 func GenerateToken(userID uint) (string, error) {
 	lifespan, err := strconv.Atoi(config.Config.GetString("jwt.lifespan"))
 	if err != nil {
-		zap.L().Error("解析 JWT Lifespan 失败", zap.Error(err))
 		return "", err
 	}
 
@@ -44,7 +42,6 @@ func ExtractToken(tokenString string) (uint, error) {
 		return []byte(config.Config.GetString("jwt.secret")), nil
 	})
 	if err != nil {
-		zap.L().Error("解析 Token 失败", zap.String("token", tokenString), zap.Error(err))
 		return 0, err
 	}
 
