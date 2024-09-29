@@ -15,7 +15,7 @@ type GetCommentListResponse struct {
 }
 
 type GetCommentListData struct {
-	PostID uint `json:"post_id" binding:"required"`
+	Post uint `form:"post"`
 }
 
 func GetCommentList(c *gin.Context) {
@@ -23,16 +23,16 @@ func GetCommentList(c *gin.Context) {
 
 	// 绑定请求数据
 	var data GetCommentListData
-	err := c.ShouldBindJSON(&data)
+	err := c.ShouldBindQuery(&data)
 	if err != nil {
 		zap.L().Error("请求数据绑定失败", zap.Error(err))
 		utils.JsonErrorResponse(c, 200506, "参数错误")
 		return
 	}
 
-	preCommentList, err := commentService.GetCommentsByPostID(data.PostID)
+	preCommentList, err := commentService.GetCommentsByPostID(data.Post)
 	if err != nil {
-		zap.L().Error("获取评论列表失败", zap.Uint("post_id", data.PostID), zap.Error(err))
+		zap.L().Error("获取评论列表失败", zap.Uint("post_id", data.Post), zap.Error(err))
 		utils.JsonInternalServerErrorResponse(c)
 		return
 	}
