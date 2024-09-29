@@ -52,3 +52,9 @@ func SetAvatar(id uint, avatar string) error {
 	result := database.DB.Where("id = ?", id).First(&models.User{}).Update("avatar", avatar)
 	return result.Error
 }
+
+func GetUserByNickname(nickname string) (user models.User, err error) {
+	result := database.DB.Where("nickname = ?", nickname).First(&user)
+	err = result.Error
+	return
+}

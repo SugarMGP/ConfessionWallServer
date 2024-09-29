@@ -6,6 +6,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
+	"gorm.io/gorm"
 )
 
 type SetProfileData struct {
@@ -28,6 +29,17 @@ func SetProfile(c *gin.Context) {
 		if len(data.Nickname) > 16 {
 			zap.L().Debug("用户昵称设置过长", zap.Uint("user_id", id), zap.Error(err))
 			utils.JsonErrorResponse(c, 200512, "用户昵称过长")
+			return
+		}
+
+		_, err := userService.GetUserByNickname(data.Nickname)
+		if err == nil {
+			zap.L().Debug("昵称已被占用", zap.Uint("user_id", id), zap.String("nickname", data.Nickname))
+			utils.JsonErrorResponse(c, 200507, "昵称已被占用")
+			return
+		} else if err != gorm.ErrRecordNotFound {
+			zap.L().Error("查询用户信息失败", zap.Error(err))
+			utils.JsonInternalServerErrorResponse(c)
 			return
 		}
 
