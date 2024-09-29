@@ -1,6 +1,7 @@
 package userController
 
 import (
+	"ConfessionWall/app/apiException"
 	"ConfessionWall/app/services/userService"
 	"ConfessionWall/app/utils"
 
@@ -24,7 +25,7 @@ func Login(c *gin.Context) {
 	err := c.ShouldBindJSON(&data)
 	if err != nil {
 		zap.L().Error("参数绑定失败", zap.Error(err))
-		utils.JsonErrorResponse(c, 200506, "参数错误")
+		c.AbortWithError(200, apiException.ParamsError)
 		return
 	}
 
@@ -33,10 +34,10 @@ func Login(c *gin.Context) {
 	if err != nil {
 		if err == gorm.ErrRecordNotFound {
 			zap.L().Debug("用户不存在", zap.String("username", data.Username))
-			utils.JsonErrorResponse(c, 200501, "用户不存在")
+			c.AbortWithError(200, apiException.UsernameOrPasswordWrong)
 		} else {
 			zap.L().Error("获取用户信息失败", zap.Error(err))
-			utils.JsonInternalServerErrorResponse(c)
+			c.AbortWithError(200, apiException.InternalServerError)
 		}
 		return
 	}
@@ -46,10 +47,10 @@ func Login(c *gin.Context) {
 	if err != nil {
 		if err == bcrypt.ErrMismatchedHashAndPassword {
 			zap.L().Debug("密码错误", zap.String("username", data.Username))
-			utils.JsonErrorResponse(c, 200501, "密码错误")
+			c.AbortWithError(200, apiException.UsernameOrPasswordWrong)
 		} else {
 			zap.L().Error("密码验证失败", zap.Error(err))
-			utils.JsonInternalServerErrorResponse(c)
+			c.AbortWithError(200, apiException.InternalServerError)
 		}
 		return
 	}
@@ -57,7 +58,7 @@ func Login(c *gin.Context) {
 	token, err := utils.GenerateToken(user.ID)
 	if err != nil {
 		zap.L().Error("生成 Token 失败", zap.Error(err))
-		utils.JsonInternalServerErrorResponse(c)
+		c.AbortWithError(200, apiException.InternalServerError)
 		return
 	}
 	response := LoginResponse{

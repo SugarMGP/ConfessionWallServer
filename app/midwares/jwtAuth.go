@@ -1,6 +1,7 @@
 package midwares
 
 import (
+	"ConfessionWall/app/apiException"
 	"ConfessionWall/app/utils"
 
 	"github.com/gin-gonic/gin"
@@ -12,8 +13,7 @@ func JWTAuth(c *gin.Context) {
 	token := c.Request.Header.Get("Authorization")
 	if token == "" { // 没有携带 token
 		zap.L().Debug("无权限访问", zap.String("Authorization", token))
-		utils.JsonErrorResponse(c, 200502, "无权限访问")
-		c.Abort() // 中止当前请求
+		c.AbortWithError(200, apiException.NoAccessPermission)
 		return
 	}
 
@@ -21,12 +21,11 @@ func JWTAuth(c *gin.Context) {
 	if err != nil {
 		if err == utils.ErrTokenHandlingFailed { // Token 处理失败
 			zap.L().Error("Token 处理失败", zap.String("Authorization", token), zap.Error(err))
-			utils.JsonInternalServerErrorResponse(c)
+			c.AbortWithError(200, apiException.InternalServerError)
 		} else { // Token 无效
 			zap.L().Debug("密钥无效", zap.String("Authorization", token), zap.Error(err))
-			utils.JsonErrorResponse(c, 200502, "密钥无效")
+			c.AbortWithError(200, apiException.NoAccessPermission)
 		}
-		c.Abort() // 中止当前请求
 		return
 	}
 

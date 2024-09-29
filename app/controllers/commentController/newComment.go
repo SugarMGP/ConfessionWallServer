@@ -1,6 +1,7 @@
 package commentController
 
 import (
+	"ConfessionWall/app/apiException"
 	"ConfessionWall/app/models"
 	"ConfessionWall/app/services/commentService"
 	"ConfessionWall/app/services/postService"
@@ -23,7 +24,7 @@ func NewComment(c *gin.Context) {
 	err := c.ShouldBindJSON(&data)
 	if err != nil {
 		zap.L().Error("请求数据绑定失败", zap.Error(err))
-		utils.JsonErrorResponse(c, 200506, "参数错误")
+		c.AbortWithError(200, apiException.ParamsError)
 		return
 	}
 
@@ -32,17 +33,17 @@ func NewComment(c *gin.Context) {
 	if err != nil {
 		if err == gorm.ErrRecordNotFound {
 			zap.L().Debug("帖子不存在", zap.Uint("post_id", data.PostID))
-			utils.JsonErrorResponse(c, 200508, "帖子不存在")
+			c.AbortWithError(200, apiException.PostNotFound)
 		} else {
 			zap.L().Error("获取帖子信息失败", zap.Uint("post_id", data.PostID), zap.Error(err))
-			utils.JsonInternalServerErrorResponse(c)
+			c.AbortWithError(200, apiException.InternalServerError)
 		}
 		return
 	}
 
 	if len(data.Content) > 500 {
 		zap.L().Debug("评论内容过长", zap.Uint("user_id", id), zap.Int("length", len(data.Content)))
-		utils.JsonErrorResponse(c, 200512, "评论内容过长")
+		c.AbortWithError(200, apiException.ContentTooLong)
 		return
 	}
 
@@ -53,7 +54,7 @@ func NewComment(c *gin.Context) {
 	})
 	if err != nil {
 		zap.L().Error("发布评论失败", zap.Uint("user_id", id), zap.Error(err))
-		utils.JsonInternalServerErrorResponse(c)
+		c.AbortWithError(200, apiException.InternalServerError)
 		return
 	}
 

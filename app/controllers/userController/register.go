@@ -1,6 +1,7 @@
 package userController
 
 import (
+	"ConfessionWall/app/apiException"
 	"ConfessionWall/app/models"
 	"ConfessionWall/app/services/userService"
 	"ConfessionWall/app/utils"
@@ -21,21 +22,21 @@ func Register(c *gin.Context) {
 	err := c.ShouldBindJSON(&data)
 	if err != nil {
 		zap.L().Error("请求数据绑定失败", zap.Error(err))
-		utils.JsonErrorResponse(c, 200506, "参数错误")
+		c.AbortWithError(200, apiException.ParamsError)
 		return
 	}
 
 	// 用户名校验
 	if !isUsernameValid(data.Username) {
 		zap.L().Debug("用户名不符合规范", zap.String("username", data.Username))
-		utils.JsonErrorResponse(c, 200505, "用户名不符合规范")
+		c.AbortWithError(200, apiException.UsernameOrPasswordError)
 		return
 	}
 
 	// 密码校验
 	if !isPasswordValid(data.Password) {
 		zap.L().Debug("密码不符合规范", zap.String("password", data.Password))
-		utils.JsonErrorResponse(c, 200505, "密码不符合规范")
+		c.AbortWithError(200, apiException.UsernameOrPasswordError)
 		return
 	}
 
@@ -43,11 +44,11 @@ func Register(c *gin.Context) {
 	_, err = userService.GetUserByUsername(data.Username)
 	if err == nil {
 		zap.L().Debug("用户名已存在", zap.String("username", data.Username))
-		utils.JsonErrorResponse(c, 200507, "用户名已存在")
+		c.AbortWithError(200, apiException.UsernameOccupied)
 		return
 	} else if err != gorm.ErrRecordNotFound {
 		zap.L().Error("查询用户信息失败", zap.Error(err))
-		utils.JsonInternalServerErrorResponse(c)
+		c.AbortWithError(200, apiException.InternalServerError)
 		return
 	}
 
@@ -58,7 +59,7 @@ func Register(c *gin.Context) {
 	})
 	if err != nil {
 		zap.L().Error("注册用户失败", zap.Error(err))
-		utils.JsonInternalServerErrorResponse(c)
+		c.AbortWithError(200, apiException.InternalServerError)
 		return
 	}
 

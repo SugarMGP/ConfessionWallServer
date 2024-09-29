@@ -1,6 +1,7 @@
 package postController
 
 import (
+	"ConfessionWall/app/apiException"
 	"ConfessionWall/app/models"
 	"ConfessionWall/app/services/postService"
 	"ConfessionWall/app/utils"
@@ -20,7 +21,7 @@ func GetMyPostList(c *gin.Context) {
 	postList, err := postService.GetMyPostList(id)
 	if err != nil {
 		zap.L().Error("获取帖子列表失败", zap.Error(err))
-		utils.JsonInternalServerErrorResponse(c)
+		c.AbortWithError(200, apiException.InternalServerError)
 		return
 	}
 

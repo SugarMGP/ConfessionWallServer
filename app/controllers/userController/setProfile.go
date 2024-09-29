@@ -1,6 +1,7 @@
 package userController
 
 import (
+	"ConfessionWall/app/apiException"
 	"ConfessionWall/app/services/userService"
 	"ConfessionWall/app/utils"
 
@@ -21,32 +22,32 @@ func SetProfile(c *gin.Context) {
 	err := c.ShouldBindJSON(&data)
 	if err != nil {
 		zap.L().Error("请求数据绑定失败", zap.Error(err))
-		utils.JsonErrorResponse(c, 200506, "参数错误")
+		c.AbortWithError(200, apiException.ParamsError)
 		return
 	}
 
 	if data.Nickname != "" {
 		if len(data.Nickname) > 16 {
 			zap.L().Debug("用户昵称设置过长", zap.Uint("user_id", id), zap.Error(err))
-			utils.JsonErrorResponse(c, 200512, "用户昵称过长")
+			c.AbortWithError(200, apiException.NicknameTooLong)
 			return
 		}
 
 		_, err := userService.GetUserByNickname(data.Nickname)
 		if err == nil {
 			zap.L().Debug("昵称已被占用", zap.Uint("user_id", id), zap.String("nickname", data.Nickname))
-			utils.JsonErrorResponse(c, 200507, "昵称已被占用")
+			c.AbortWithError(200, apiException.NicknameOccupied)
 			return
 		} else if err != gorm.ErrRecordNotFound {
 			zap.L().Error("查询用户信息失败", zap.Error(err))
-			utils.JsonInternalServerErrorResponse(c)
+			c.AbortWithError(200, apiException.InternalServerError)
 			return
 		}
 
 		err = userService.SetNickname(id, data.Nickname)
 		if err != nil {
 			zap.L().Error("用户昵称设置失败", zap.Uint("user_id", id), zap.Error(err))
-			utils.JsonInternalServerErrorResponse(c)
+			c.AbortWithError(200, apiException.InternalServerError)
 			return
 		}
 	}
@@ -55,7 +56,7 @@ func SetProfile(c *gin.Context) {
 		err = userService.SetAvatar(id, data.Avatar)
 		if err != nil {
 			zap.L().Error("用户头像设置失败", zap.Uint("user_id", id), zap.Error(err))
-			utils.JsonInternalServerErrorResponse(c)
+			c.AbortWithError(200, apiException.InternalServerError)
 			return
 		}
 	}

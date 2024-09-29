@@ -1,6 +1,7 @@
 package blockController
 
 import (
+	"ConfessionWall/app/apiException"
 	"ConfessionWall/app/services/blockService"
 	"ConfessionWall/app/services/userService"
 	"ConfessionWall/app/utils"
@@ -26,7 +27,7 @@ func GetBlacklist(c *gin.Context) {
 	blocks, err := blockService.GetBlocksByUserID(id)
 	if err != nil {
 		zap.L().Error("获取拉黑列表失败", zap.Error(err))
-		utils.JsonInternalServerErrorResponse(c)
+		c.AbortWithError(200, apiException.InternalServerError)
 		return
 	}
 

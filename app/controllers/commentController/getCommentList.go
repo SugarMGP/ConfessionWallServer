@@ -1,6 +1,7 @@
 package commentController
 
 import (
+	"ConfessionWall/app/apiException"
 	"ConfessionWall/app/models"
 	"ConfessionWall/app/services/blockService"
 	"ConfessionWall/app/services/commentService"
@@ -26,21 +27,21 @@ func GetCommentList(c *gin.Context) {
 	err := c.ShouldBindQuery(&data)
 	if err != nil {
 		zap.L().Error("请求数据绑定失败", zap.Error(err))
-		utils.JsonErrorResponse(c, 200506, "参数错误")
+		c.AbortWithError(200, apiException.ParamsError)
 		return
 	}
 
 	preCommentList, err := commentService.GetCommentsByPostID(data.Post)
 	if err != nil {
 		zap.L().Error("获取评论列表失败", zap.Uint("post_id", data.Post), zap.Error(err))
-		utils.JsonInternalServerErrorResponse(c)
+		c.AbortWithError(200, apiException.InternalServerError)
 		return
 	}
 
 	blocks, err := blockService.GetBlocksByUserID(id)
 	if err != nil {
 		zap.L().Error("获取拉黑列表失败", zap.Error(err))
-		utils.JsonInternalServerErrorResponse(c)
+		c.AbortWithError(200, apiException.InternalServerError)
 		return
 	}
 

@@ -1,6 +1,7 @@
 package postController
 
 import (
+	"ConfessionWall/app/apiException"
 	"ConfessionWall/app/services/postService"
 	"ConfessionWall/app/utils"
 
@@ -22,7 +23,7 @@ func UpdatePost(c *gin.Context) {
 	err := c.ShouldBindJSON(&data)
 	if err != nil {
 		zap.L().Error("请求数据绑定失败", zap.Error(err))
-		utils.JsonErrorResponse(c, 200506, "参数错误")
+		c.AbortWithError(200, apiException.ParamsError)
 		return
 	}
 
@@ -31,22 +32,22 @@ func UpdatePost(c *gin.Context) {
 	if err != nil {
 		if err == gorm.ErrRecordNotFound {
 			zap.L().Debug("帖子不存在", zap.Uint("post_id", data.PostID))
-			utils.JsonErrorResponse(c, 200508, "帖子不存在")
+			c.AbortWithError(200, apiException.PostNotFound)
 		} else {
 			zap.L().Error("获取帖子信息失败", zap.Uint("post_id", data.PostID), zap.Error(err))
-			utils.JsonInternalServerErrorResponse(c)
+			c.AbortWithError(200, apiException.InternalServerError)
 		}
 		return
 	}
 	if post.User != id {
 		zap.L().Debug("请求的用户与发帖人不符", zap.Uint("user_id", id), zap.Uint("post_user_id", post.User))
-		utils.JsonErrorResponse(c, 200509, "请求的用户与发帖人不符")
+		c.AbortWithError(200, apiException.NoOperatePermission)
 		return
 	}
 
 	if len(data.Content) > 2000 {
 		zap.L().Debug("帖子内容过长", zap.Uint("user_id", id), zap.Int("length", len(data.Content)))
-		utils.JsonErrorResponse(c, 200512, "帖子内容过长")
+		c.AbortWithError(200, apiException.ContentTooLong)
 		return
 	}
 
@@ -54,7 +55,7 @@ func UpdatePost(c *gin.Context) {
 	err = postService.UpdatePost(data.PostID, data.Content)
 	if err != nil {
 		zap.L().Error("编辑帖子失败", zap.Uint("post_id", data.PostID), zap.Error(err))
-		utils.JsonInternalServerErrorResponse(c)
+		c.AbortWithError(200, apiException.InternalServerError)
 		return
 	}
 

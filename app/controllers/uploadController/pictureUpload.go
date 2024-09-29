@@ -1,6 +1,7 @@
 package uploadController
 
 import (
+	"ConfessionWall/app/apiException"
 	"ConfessionWall/app/utils"
 	"crypto/md5"
 	"fmt"
@@ -23,12 +24,12 @@ func PictureUpload(c *gin.Context) {
 	file, err := c.FormFile("picture")
 	if err != nil {
 		zap.L().Error("文件获取失败", zap.Error(err))
-		utils.JsonErrorResponse(c, 200506, "参数错误")
+		c.AbortWithError(200, apiException.ParamsError)
 		return
 	}
 
 	if file.Size > 4*1024*1024 {
-		utils.JsonErrorResponse(c, 200511, "文件过大")
+		c.AbortWithError(200, apiException.FileTooLarge)
 		return
 	}
 
@@ -39,7 +40,7 @@ func PictureUpload(c *gin.Context) {
 	src, err := file.Open()
 	if err != nil {
 		zap.L().Error("文件打开失败", zap.Error(err))
-		utils.JsonInternalServerErrorResponse(c)
+		c.AbortWithError(200, apiException.InternalServerError)
 		return
 	}
 	defer src.Close()
@@ -48,13 +49,13 @@ func PictureUpload(c *gin.Context) {
 	data, err := io.ReadAll(src)
 	if err != nil {
 		zap.L().Error("文件读取失败", zap.Error(err))
-		utils.JsonInternalServerErrorResponse(c)
+		c.AbortWithError(200, apiException.InternalServerError)
 		return
 	}
 
 	// 检查文件类型
 	if !filetype.IsImage(data) {
-		utils.JsonErrorResponse(c, 200506, "文件类型错误")
+		c.AbortWithError(200, apiException.FileTypeError)
 		return
 	}
 

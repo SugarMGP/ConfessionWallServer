@@ -1,6 +1,7 @@
 package userController
 
 import (
+	"ConfessionWall/app/apiException"
 	"ConfessionWall/app/services/userService"
 	"ConfessionWall/app/utils"
 
@@ -20,7 +21,7 @@ func GetProfile(c *gin.Context) {
 	user, err := userService.GetUserByID(id)
 	if err != nil {
 		zap.L().Error("获取用户信息失败", zap.Error(err))
-		utils.JsonInternalServerErrorResponse(c)
+		c.AbortWithError(200, apiException.InternalServerError)
 		return
 	}
 

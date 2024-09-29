@@ -1,6 +1,7 @@
 package postController
 
 import (
+	"ConfessionWall/app/apiException"
 	"ConfessionWall/app/models"
 	"ConfessionWall/app/services/postService"
 	"ConfessionWall/app/utils"
@@ -25,13 +26,13 @@ func NewPost(c *gin.Context) {
 	err := c.ShouldBindJSON(&data)
 	if err != nil {
 		zap.L().Error("请求数据绑定失败", zap.Error(err))
-		utils.JsonErrorResponse(c, 200506, "参数错误")
+		c.AbortWithError(200, apiException.ParamsError)
 		return
 	}
 
 	if len(data.Content) > 2000 {
 		zap.L().Debug("帖子内容过长", zap.Uint("user_id", id), zap.Int("length", len(data.Content)))
-		utils.JsonErrorResponse(c, 200512, "帖子内容过长")
+		c.AbortWithError(200, apiException.ContentTooLong)
 		return
 	}
 
@@ -40,7 +41,7 @@ func NewPost(c *gin.Context) {
 		unix, err := strconv.ParseInt(data.PostUnix, 10, 64)
 		if err != nil {
 			zap.L().Debug("string转换int64失败", zap.Error(err))
-			utils.JsonErrorResponse(c, 200506, "参数错误")
+			c.AbortWithError(200, apiException.ParamsError)
 			return
 		}
 		postTime = time.Unix(unix, 0)
@@ -55,7 +56,7 @@ func NewPost(c *gin.Context) {
 	})
 	if err != nil {
 		zap.L().Error("新建帖子失败", zap.Uint("user_id", id), zap.Error(err))
-		utils.JsonInternalServerErrorResponse(c)
+		c.AbortWithError(200, apiException.InternalServerError)
 		return
 	}
 

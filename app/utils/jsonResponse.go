@@ -28,7 +28,3 @@ func JsonSuccessResponse(c *gin.Context, data interface{}) {
 func JsonErrorResponse(c *gin.Context, code int, msg string) {
 	JsonResponse(c, 200, code, msg, nil)
 }
-
-func JsonInternalServerErrorResponse(c *gin.Context) {
-	JsonResponse(c, 200, 200500, "Internal server error", nil)
-}

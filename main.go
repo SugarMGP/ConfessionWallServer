@@ -25,6 +25,7 @@ func main() {
 	r.NoMethod(midwares.HandleNotFound) // 使用404统一处理中间件
 	r.NoRoute(midwares.HandleNotFound)
 	r.Use(midwares.Limiter())
+	r.Use(midwares.ErrHandler()) // 统一错误处理中间件
 
 	// 确保 static 目录存在，如果不存在则创建
 	if _, err := os.Stat("static"); os.IsNotExist(err) {

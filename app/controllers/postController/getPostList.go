@@ -1,6 +1,7 @@
 package postController
 
 import (
+	"ConfessionWall/app/apiException"
 	"ConfessionWall/app/services/blockService"
 	"ConfessionWall/app/services/postService"
 	"ConfessionWall/app/services/userService"
@@ -29,14 +30,14 @@ func GetPostList(c *gin.Context) {
 	postList, err := postService.GetPostList()
 	if err != nil {
 		zap.L().Error("获取帖子列表失败", zap.Error(err))
-		utils.JsonInternalServerErrorResponse(c)
+		c.AbortWithError(200, apiException.InternalServerError)
 		return
 	}
 
 	blocks, err := blockService.GetBlocksByUserID(id)
 	if err != nil {
 		zap.L().Error("获取拉黑列表失败", zap.Error(err))
-		utils.JsonInternalServerErrorResponse(c)
+		c.AbortWithError(200, apiException.InternalServerError)
 		return
 	}
 

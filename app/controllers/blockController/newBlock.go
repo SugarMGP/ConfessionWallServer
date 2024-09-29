@@ -1,6 +1,7 @@
 package blockController
 
 import (
+	"ConfessionWall/app/apiException"
 	"ConfessionWall/app/models"
 	"ConfessionWall/app/services/blockService"
 	"ConfessionWall/app/services/postService"
@@ -22,29 +23,34 @@ func NewBlock(c *gin.Context) {
 	err := c.ShouldBindJSON(&data)
 	if err != nil {
 		zap.L().Error("请求数据绑定失败", zap.Error(err))
-		utils.JsonErrorResponse(c, 200506, "参数错误")
+		c.AbortWithError(200, apiException.ParamsError)
 		return
 	}
 
 	post, err := postService.GetPostByID(data.PostID)
 	if err != nil {
-		zap.L().Error("查询帖子信息失败", zap.Uint("post_id", data.PostID), zap.Error(err))
-		utils.JsonInternalServerErrorResponse(c)
+		if err == gorm.ErrRecordNotFound {
+			zap.L().Debug("帖子不存在", zap.Uint("post_id", data.PostID))
+			c.AbortWithError(200, apiException.PostNotFound)
+		} else {
+			zap.L().Error("获取帖子信息失败", zap.Uint("post_id", data.PostID), zap.Error(err))
+			c.AbortWithError(200, apiException.InternalServerError)
+		}
 		return
 	}
 	if post.User == id {
-		utils.JsonErrorResponse(c, 200510, "不能屏蔽自己的帖子")
+		c.AbortWithError(200, apiException.AttemptToBlockSelf)
 		return
 	}
 
 	_, err = blockService.GetBlockByID(id, post.User)
 	if err == nil {
 		zap.L().Debug("拉黑关系已存在", zap.Uint("user_id", id), zap.Uint("target_id", post.User))
-		utils.JsonErrorResponse(c, 200503, "拉黑关系已存在")
+		c.AbortWithError(200, apiException.HasBlocked)
 		return
 	} else if err != gorm.ErrRecordNotFound {
 		zap.L().Error("查询拉黑信息失败", zap.Uint("user_id", id), zap.Uint("target_id", post.User), zap.Error(err))
-		utils.JsonInternalServerErrorResponse(c)
+		c.AbortWithError(200, apiException.InternalServerError)
 		return
 	}
 
@@ -54,7 +60,7 @@ func NewBlock(c *gin.Context) {
 	})
 	if err != nil {
 		zap.L().Error("新建拉黑失败", zap.Uint("user_id", id), zap.Uint("target_id", post.User), zap.Error(err))
-		utils.JsonInternalServerErrorResponse(c)
+		c.AbortWithError(200, apiException.InternalServerError)
 		return
 	}
 
