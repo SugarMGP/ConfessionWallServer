@@ -62,7 +62,7 @@ func PictureUpload(c *gin.Context) {
 	hashString := fmt.Sprintf("%x", md5.Sum(data))
 
 	filePath := "./static/" + hashString + ext
-	url := "http://101.37.29.240:8080/static/" + hashString + ext
+	url := "http://" + c.Request.Host + "/static/" + hashString + ext
 
 	// 检查文件是否已存在
 	if _, err := os.Stat(filePath); err == nil {
