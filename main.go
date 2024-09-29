@@ -40,7 +40,5 @@ func main() {
 	err := r.Run()
 	if err != nil {
 		zap.L().Fatal("Server start failed", zap.Error(err))
-	} else {
-		zap.L().Info("Server start success")
 	}
 }
