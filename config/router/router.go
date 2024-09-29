@@ -28,6 +28,8 @@ func Init(r *gin.Engine) {
 		api.DELETE("/confession", postController.DeletePost)
 
 		api.POST("/blacklist", blockController.NewBlock)
+		api.DELETE("/blacklist", blockController.DeleteBlock)
+		api.GET("/blacklist", blockController.GetBlacklist)
 		api.POST("/confession/comment", commentController.NewComment)
 		api.GET("/confession/comment", commentController.GetCommentList)
 		api.DELETE("/confession/comment", commentController.DeleteComment)
