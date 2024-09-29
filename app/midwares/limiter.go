@@ -10,10 +10,10 @@ import (
 )
 
 func Limiter() gin.HandlerFunc {
-	// 每秒允许2个请求
+	// 每秒允许3个请求
 	rate := limiter.Rate{
 		Period: 1 * time.Second,
-		Limit:  2,
+		Limit:  3,
 	}
 
 	// 内存存储
