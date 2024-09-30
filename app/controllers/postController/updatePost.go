@@ -45,7 +45,7 @@ func UpdatePost(c *gin.Context) {
 		return
 	}
 
-	if len(data.Content) > 2000 {
+	if len(data.Content) > 5000 {
 		zap.L().Debug("帖子内容过长", zap.Uint("user_id", id), zap.Int("length", len(data.Content)))
 		c.AbortWithError(200, apiException.ContentTooLong)
 		return
