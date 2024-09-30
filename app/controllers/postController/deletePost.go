@@ -40,8 +40,8 @@ func DeletePost(c *gin.Context) {
 	}
 
 	// 检查用户是否有权限删除帖子
-	if post.User != id {
-		zap.L().Debug("请求的用户与发帖人不符", zap.Uint("user_id", id), zap.Uint("post_user_id", post.User))
+	if post.UserID != id {
+		zap.L().Debug("请求的用户与发帖人不符", zap.Uint("user_id", id), zap.Uint("post_user_id", post.UserID))
 		c.AbortWithError(200, apiException.NoOperatePermission)
 		return
 	}

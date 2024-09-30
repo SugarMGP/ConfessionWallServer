@@ -50,7 +50,7 @@ func NewPost(c *gin.Context) {
 	// 新建帖子
 	err = postService.NewPost(models.Post{
 		Content:  data.Content,
-		User:     id,
+		UserID:   id,
 		Unnamed:  data.Unnamed,
 		PostTime: postTime,
 	})

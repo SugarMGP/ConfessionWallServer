@@ -9,7 +9,7 @@ import (
 type Post struct { //json tag for "GetMyPostList"
 	ID        uint           `json:"post_id"`
 	Content   string         `json:"content" gorm:"type:text"`
-	User      uint           `json:"-"`
+	UserID    uint           `json:"-"`
 	Unnamed   bool           `json:"unnamed"`
 	PostTime  time.Time      `json:"-"`
 	CreatedAt time.Time      `json:"-"`
