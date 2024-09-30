@@ -2,9 +2,9 @@ package commentController
 
 import (
 	"ConfessionWall/app/apiException"
-	"ConfessionWall/app/models"
 	"ConfessionWall/app/services/blockService"
 	"ConfessionWall/app/services/commentService"
+	"ConfessionWall/app/services/userService"
 	"ConfessionWall/app/utils"
 
 	"github.com/gin-gonic/gin"
@@ -12,7 +12,14 @@ import (
 )
 
 type GetCommentListResponse struct {
-	CommentList []models.Comment `json:"comment_list"`
+	CommentList []CommentElement `json:"comment_list"`
+}
+
+type CommentElement struct {
+	ID       uint   `json:"comment_id"`
+	Content  string `json:"content"`
+	Nickname string `json:"nickname"`
+	Avatar   string `json:"avatar"`
 }
 
 type GetCommentListData struct {
@@ -45,7 +52,7 @@ func GetCommentList(c *gin.Context) {
 		return
 	}
 
-	commentList := make([]models.Comment, 0)
+	commentList := make([]CommentElement, 0)
 	for _, comment := range preCommentList {
 		// 判断是否被屏蔽
 		blocked := false
@@ -58,7 +65,23 @@ func GetCommentList(c *gin.Context) {
 		if blocked {
 			continue
 		}
-		commentList = append(commentList, comment)
+
+		nickname := ""
+		avatar := ""
+		user, err := userService.GetUserByID(comment.UserID)
+		if err == nil { // 如果能获取到用户
+			nickname = user.Nickname
+			avatar = user.Avatar
+		} else {
+			zap.L().Error("获取用户信息失败", zap.Uint("user_id", comment.UserID), zap.Error(err))
+		}
+
+		commentList = append(commentList, CommentElement{
+			ID:       comment.ID,
+			Content:  comment.Content,
+			Nickname: nickname,
+			Avatar:   avatar,
+		})
 	}
 
 	zap.L().Info("获取帖子列表成功", zap.Int("count", len(commentList)))
