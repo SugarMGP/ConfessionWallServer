@@ -26,6 +26,11 @@ func SetProfile(c *gin.Context) {
 		return
 	}
 
+	if data.Nickname == "" && data.Avatar == "" {
+		c.AbortWithError(200, apiException.ParamsError)
+		return
+	}
+
 	if data.Nickname != "" {
 		if len(data.Nickname) > 16 {
 			zap.L().Debug("用户昵称设置过长", zap.Uint("user_id", id), zap.Error(err))
