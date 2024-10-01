@@ -17,7 +17,7 @@ func GetPostList() (posts []models.Post, err error) {
 }
 
 func GetMyPostList(user uint) (posts []models.Post, err error) {
-	result := database.DB.Where("user = ?", user).Find(&posts)
+	result := database.DB.Where("user_id = ?", user).Find(&posts)
 	err = result.Error
 	return
 }

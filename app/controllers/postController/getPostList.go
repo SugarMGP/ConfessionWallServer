@@ -69,7 +69,7 @@ func GetPostList(c *gin.Context) {
 				nickname = user.Nickname
 				avatar = user.Avatar
 			} else {
-				zap.L().Error("获取用户信息失败", zap.Uint("user_id", post.UserID), zap.Error(err))
+				zap.L().Error("获取用户信息失败", zap.Uint("post_id", post.ID), zap.Uint("user_id", post.UserID), zap.Error(err))
 			}
 		}
 
