@@ -15,4 +15,5 @@ type Post struct { //json tag for "GetMyPostList"
 	CreatedAt time.Time      `json:"-"`
 	UpdatedAt time.Time      `json:"-"`
 	DeletedAt gorm.DeletedAt `json:"-"`
+	IsPublic  bool           `json:"is_public"`
 }
