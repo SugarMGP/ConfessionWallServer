@@ -10,10 +10,10 @@ import (
 
 type Comment struct {
 	ID        uint
-	PostID    uint `json:"post_id"`
+	PostID    uint
 	UserID    uint
 	Content   string `gorm:"type:text"`
-	Likes     int64  `json:"likes" gorm:"default:0"`
+	Likes     int64  `gorm:"default:0"`
 	CreatedAt time.Time
 	DeletedAt gorm.DeletedAt
 }

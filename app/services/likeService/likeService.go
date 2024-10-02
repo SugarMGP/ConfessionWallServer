@@ -26,10 +26,12 @@ func PostLikeCount(PostID uint) error {
 	result := database.DB.Where("id = ?", PostID).First(&models.Post{}).Update("likes", postCount)
 	return result.Error
 }
+
 func GetCommentKey(CommentID uint) string {
 	return fmt.Sprintf("comment:likes:%d", CommentID)
 }
-func CommentLikeCount(PostID uint, CommentID uint) error {
+
+func CommentLikeCount(CommentID uint) error {
 	var keys string = GetCommentKey(CommentID)
 	redisClient := rds.GetRedis()
 	defer redisClient.Close()
@@ -38,6 +40,6 @@ func CommentLikeCount(PostID uint, CommentID uint) error {
 	if err != nil {
 		return err
 	}
-	result := database.DB.Where("id = ? AND post_id = ?", CommentID, PostID).First(&models.Comment{}).Update("likes", commentCount)
+	result := database.DB.Where("id = ?", CommentID).First(&models.Comment{}).Update("likes", commentCount)
 	return result.Error
 }
