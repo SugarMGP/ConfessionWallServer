@@ -20,6 +20,7 @@ type CommentElement struct {
 	Content  string `json:"content"`
 	Nickname string `json:"nickname"`
 	Avatar   string `json:"avatar"`
+	Likes    int64  `json:"likes"`
 }
 
 type GetCommentListData struct {
@@ -81,6 +82,7 @@ func GetCommentList(c *gin.Context) {
 			Content:  comment.Content,
 			Nickname: nickname,
 			Avatar:   avatar,
+			Likes:    comment.Likes,
 		})
 	}
 

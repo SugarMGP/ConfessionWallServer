@@ -5,6 +5,7 @@ import (
 	"ConfessionWall/config/config"
 	"ConfessionWall/config/database"
 	"ConfessionWall/config/logger"
+	"ConfessionWall/config/rds"
 	"ConfessionWall/config/router"
 	"os"
 
@@ -17,9 +18,9 @@ func main() {
 	if !debug {
 		gin.SetMode(gin.ReleaseMode)
 	}
-
 	logger.Init(debug)
 	database.Init()
+	rds.GetRedis()
 	r := gin.Default()
 	r.ForwardedByClientIP = true
 	r.NoMethod(midwares.HandleNotFound) // 使用404统一处理中间件

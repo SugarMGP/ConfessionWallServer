@@ -11,6 +11,7 @@ type Post struct { //json tag for "GetMyPostList"
 	Content   string         `json:"content" gorm:"type:text"`
 	UserID    uint           `json:"-"`
 	Unnamed   bool           `json:"unnamed"`
+	Likes     int64          `json:"likes" gorm:"default:0"`
 	PostTime  time.Time      `json:"-"`
 	CreatedAt time.Time      `json:"-"`
 	UpdatedAt time.Time      `json:"-"`

@@ -20,6 +20,7 @@ type Confession struct {
 	ID       uint   `json:"post_id"`
 	Nickname string `json:"nickname"`
 	Content  string `json:"content"`
+	Likes    int64  `json:"likes"`
 	Avatar   string `json:"avatar"`
 }
 
@@ -40,7 +41,6 @@ func GetPostList(c *gin.Context) {
 		c.AbortWithError(200, apiException.InternalServerError)
 		return
 	}
-
 	// 创建一个Confession数组
 	// 遍历postList，将信息填入数组中
 	confessionList := make([]Confession, 0)
@@ -72,16 +72,15 @@ func GetPostList(c *gin.Context) {
 				zap.L().Error("获取用户信息失败", zap.Uint("post_id", post.ID), zap.Uint("user_id", post.UserID), zap.Error(err))
 			}
 		}
-
 		confession := Confession{
 			ID:       post.ID,
 			Nickname: nickname,
 			Content:  post.Content,
 			Avatar:   avatar,
+			Likes:    post.Likes,
 		}
 		confessionList = append(confessionList, confession)
 	}
-
 	// 成功获取帖子列表
 	zap.L().Info("获取帖子列表成功", zap.Int("count", len(postList)))
 	utils.JsonSuccessResponse(c, GetListResponse{

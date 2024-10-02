@@ -5,8 +5,15 @@ database:
   host: "127.0.0.1"
   port: 3306
   user: root
-  password: 123456
+  password: remzs486
 
 jwt:
   secret: "wP3-sN68>g&lVgG4-8>J9)"
   lifespan: 6
+
+redis:
+  addr: "127.0.0.1:6379"
+  password: ""
+  DB: 0
+  poolSize: 30
+  minIdleConn: 30
