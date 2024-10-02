@@ -34,7 +34,7 @@ func DeletePost(id uint) error {
 	return result.Error
 }
 
-func UpdatePost(id uint, content string) error {
-	result := database.DB.Where("id = ?", id).First(&models.Post{}).Update("content", content)
+func UpdatePost(id uint, content string, unnamed bool, private bool) error {
+	result := database.DB.Where("id = ?", id).First(&models.Post{}).Updates(map[string]interface{}{"content": content, "unnamed": unnamed, "private": private})
 	return result.Error
 }
