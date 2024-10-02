@@ -1,6 +1,6 @@
 debug: true
 
-default_avatar: "https://s2.loli.net/2024/10/02/q2KJZoOnUDCILAt.png"
+default_avatar: "https://cdn.luogu.com.cn/upload/usericon/1.png"
 
 database:
   database: confessionwall
