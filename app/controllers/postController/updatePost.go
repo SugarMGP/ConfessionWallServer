@@ -13,6 +13,8 @@ import (
 type UpdatePostData struct {
 	PostID  uint   `json:"post_id" binding:"required"`
 	Content string `json:"content" binding:"required"`
+	Unnamed bool   `json:"unnamed"`
+	Private bool   `json:"private"`
 }
 
 func UpdatePost(c *gin.Context) {
@@ -52,7 +54,7 @@ func UpdatePost(c *gin.Context) {
 	}
 
 	// 编辑帖子
-	err = postService.UpdatePost(data.PostID, data.Content)
+	err = postService.UpdatePost(data.PostID, data.Content, data.Unnamed, data.Private)
 	if err != nil {
 		zap.L().Error("编辑帖子失败", zap.Uint("post_id", data.PostID), zap.Error(err))
 		c.AbortWithError(200, apiException.InternalServerError)

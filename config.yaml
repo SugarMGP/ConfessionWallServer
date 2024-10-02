@@ -1,5 +1,7 @@
 debug: true
 
+default_avatar: "https://cdn.luogu.com.cn/upload/usericon/1.png"
+
 database:
   database: confessionwall
   host: "127.0.0.1"
@@ -9,8 +11,7 @@ database:
 
 jwt:
   secret: "wP3-sN68>g&lVgG4-8>J9)"
-  lifespan: 6
-
+  lifespan: 24
 redis:
   addr: "127.0.0.1:6379"
   password: ""

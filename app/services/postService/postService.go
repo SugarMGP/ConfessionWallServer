@@ -11,9 +11,10 @@ func NewPost(post models.Post) error {
 }
 
 func GetPostList() (posts []models.Post, err error) {
-	result := database.DB.Order("post_time desc").Find(&posts)
+	result := database.DB.Order("post_time desc").Where("private = ?", false).Find(&posts)
 	err = result.Error
 	return
+
 }
 
 func GetMyPostList(user uint) (posts []models.Post, err error) {
@@ -33,7 +34,7 @@ func DeletePost(id uint) error {
 	return result.Error
 }
 
-func UpdatePost(id uint, content string) error {
-	result := database.DB.Where("id = ?", id).First(&models.Post{}).Update("content", content)
+func UpdatePost(id uint, content string, unnamed bool, private bool) error {
+	result := database.DB.Where("id = ?", id).First(&models.Post{}).Updates(map[string]interface{}{"content": content, "unnamed": unnamed, "private": private})
 	return result.Error
 }

@@ -16,6 +16,7 @@ type NewPostData struct {
 	Content  string `json:"content" binding:"required"`
 	Unnamed  bool   `json:"unnamed"`
 	PostUnix string `json:"post_unix"`
+	Private  bool   `json:"private"`
 }
 
 func NewPost(c *gin.Context) {
@@ -53,6 +54,7 @@ func NewPost(c *gin.Context) {
 		UserID:   id,
 		Unnamed:  data.Unnamed,
 		PostTime: postTime,
+		Private:  data.Private,
 	})
 	if err != nil {
 		zap.L().Error("新建帖子失败", zap.Uint("user_id", id), zap.Error(err))
