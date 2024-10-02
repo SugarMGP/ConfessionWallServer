@@ -11,7 +11,7 @@ func NewPost(post models.Post) error {
 }
 
 func GetPostList() (posts []models.Post, err error) {
-	result := database.DB.Order("post_time desc").Where("is_public =?", true).Find(&posts)
+	result := database.DB.Order("post_time desc").Where("private = ?", false).Find(&posts)
 	err = result.Error
 	return
 
