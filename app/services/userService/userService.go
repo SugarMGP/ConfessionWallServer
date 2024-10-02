@@ -2,6 +2,7 @@ package userService
 
 import (
 	"ConfessionWall/app/models"
+	"ConfessionWall/config/config"
 	"ConfessionWall/config/database"
 	"crypto/md5"
 	"fmt"
@@ -32,6 +33,9 @@ func Register(user models.User) error {
 	// 昵称默认为用户名的哈希值
 	hashedUsername := fmt.Sprintf("%x", md5.Sum([]byte(user.Username)))
 	user.Nickname = "用户" + hashedUsername[:12]
+
+	// 从配置文件读取默认头像
+	user.Avatar = config.Config.GetString("default_avatar")
 
 	result := database.DB.Create(&user)
 	return result.Error

@@ -1,5 +1,7 @@
 debug: true
 
+default_avatar: "https://s2.loli.net/2024/10/02/q2KJZoOnUDCILAt.png"
+
 database:
   database: confessionwall
   host: "127.0.0.1"
@@ -9,4 +11,4 @@ database:
 
 jwt:
   secret: "wP3-sN68>g&lVgG4-8>J9)"
-  lifespan: 6
+  lifespan: 24
