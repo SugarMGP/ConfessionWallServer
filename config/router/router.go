@@ -26,6 +26,7 @@ func Init(r *gin.Engine) {
 		api.POST("/confession", postController.NewPost)
 		api.PUT("/confession", postController.UpdatePost)
 		api.DELETE("/confession", postController.DeletePost)
+		api.POST("/confession/like", postController.LikePost)
 
 		api.POST("/blacklist", blockController.NewBlock)
 		api.DELETE("/blacklist", blockController.DeleteBlock)
@@ -33,6 +34,7 @@ func Init(r *gin.Engine) {
 		api.POST("/confession/comment", commentController.NewComment)
 		api.GET("/confession/comment", commentController.GetCommentList)
 		api.DELETE("/confession/comment", commentController.DeleteComment)
+		api.POST("/confession/comment/like", commentController.LikeComment)
 
 		api.POST("/upload", uploadController.PictureUpload)
 	}

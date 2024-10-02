@@ -7,7 +7,7 @@ database:
   host: "127.0.0.1"
   port: 3306
   user: root
-  password: remzs486
+  password: 123456
 
 jwt:
   secret: "wP3-sN68>g&lVgG4-8>J9)"
