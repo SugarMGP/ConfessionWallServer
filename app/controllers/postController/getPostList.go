@@ -22,6 +22,7 @@ type Confession struct {
 	Content  string `json:"content"`
 	Likes    int64  `json:"likes"`
 	Avatar   string `json:"avatar"`
+	IsLiked  bool   `json:"is_liked"`
 }
 
 func GetPostList(c *gin.Context) {
