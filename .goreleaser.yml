@@ -24,4 +24,4 @@ archives:
     files:
       - LICENSE
       - README.md
-      - config.yaml
+      - config.example.yaml

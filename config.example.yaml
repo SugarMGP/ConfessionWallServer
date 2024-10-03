@@ -10,7 +10,7 @@ database:
   password: 123456
 
 jwt:
-  secret: "wP3-sN68>g&lVgG4-8>J9)"
+  secret: "这是一个secret"
   lifespan: 24
 
 redis:
