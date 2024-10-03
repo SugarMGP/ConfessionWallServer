@@ -32,6 +32,11 @@ func SetProfile(c *gin.Context) {
 	}
 
 	if data.Nickname != "" {
+		if data.Nickname == "匿名用户" {
+			c.AbortWithError(200, apiException.NicknameOccupied)
+			return
+		}
+
 		if len(data.Nickname) > 16 {
 			zap.L().Debug("用户昵称设置过长", zap.Uint("user_id", id), zap.Error(err))
 			c.AbortWithError(200, apiException.NicknameTooLong)
