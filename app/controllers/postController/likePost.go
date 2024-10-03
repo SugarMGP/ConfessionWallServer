@@ -34,7 +34,7 @@ func LikePost(c *gin.Context) {
 
 	res, err := redis.GetBit(ctx, postKey, user-1).Result()
 	if err != nil {
-		zap.L().Debug("从Redis获取点赞状态失败", zap.Uint("post_id", data.PostID), zap.Uint("user_id", id))
+		zap.L().Error("从Redis获取点赞状态失败", zap.Uint("post_id", data.PostID), zap.Uint("user_id", id))
 		c.AbortWithError(200, apiException.InternalServerError)
 		return
 	}
@@ -47,27 +47,31 @@ func LikePost(c *gin.Context) {
 			return
 		}
 
-		err := likeService.PostLikeCount(data.PostID)
+		err = likeService.PostLikeCount(data.PostID)
 		if err != nil {
 			zap.L().Error("累计点赞数失败", zap.Uint("post_id", data.PostID), zap.Uint("user_id", id), zap.Error(err))
-			c.AbortWithError(200, apiException.InternalServerError)
-			return
-		}
-		return
-	} else { // 用户未点赞过
-		_, err = redis.SetBit(ctx, postKey, user-1, 1).Result()
-		if err != nil {
-			zap.L().Error("设置点赞状态失败", zap.Uint("post_id", data.PostID), zap.Uint("user_id", id), zap.Error(err))
 			c.AbortWithError(200, apiException.InternalServerError)
 			return
 		}
 
-		err := likeService.PostLikeCount(data.PostID)
-		if err != nil {
-			zap.L().Error("累计点赞数失败", zap.Uint("post_id", data.PostID), zap.Uint("user_id", id), zap.Error(err))
-			c.AbortWithError(200, apiException.InternalServerError)
-			return
-		}
 		utils.JsonSuccessResponse(c, nil)
+		return
 	}
+
+	// 用户未点赞过
+	_, err = redis.SetBit(ctx, postKey, user-1, 1).Result()
+	if err != nil {
+		zap.L().Error("设置点赞状态失败", zap.Uint("post_id", data.PostID), zap.Uint("user_id", id), zap.Error(err))
+		c.AbortWithError(200, apiException.InternalServerError)
+		return
+	}
+
+	err = likeService.PostLikeCount(data.PostID)
+	if err != nil {
+		zap.L().Error("累计点赞数失败", zap.Uint("post_id", data.PostID), zap.Uint("user_id", id), zap.Error(err))
+		c.AbortWithError(200, apiException.InternalServerError)
+		return
+	}
+
+	utils.JsonSuccessResponse(c, nil)
 }
