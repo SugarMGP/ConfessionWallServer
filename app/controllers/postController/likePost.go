@@ -29,7 +29,6 @@ func LikePost(c *gin.Context) {
 
 	postKey := likeService.GetPostKey(data.PostID)
 	redis := rds.GetRedis()
-	defer redis.Close()
 	ctx := context.Background()
 
 	res, err := redis.GetBit(ctx, postKey, user-1).Result()

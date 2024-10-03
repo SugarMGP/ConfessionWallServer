@@ -29,7 +29,6 @@ func LikeComment(c *gin.Context) {
 
 	commentKey := likeService.GetCommentKey(data.CommentID)
 	redis := rds.GetRedis()
-	defer redis.Close()
 	ctx := context.Background()
 
 	res, err := redis.GetBit(ctx, commentKey, user-1).Result()

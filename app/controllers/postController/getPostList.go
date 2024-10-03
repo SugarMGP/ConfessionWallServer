@@ -82,7 +82,6 @@ func GetPostList(c *gin.Context) {
 		// 获取点赞状态
 		postKey := likeService.GetPostKey(post.ID)
 		redis := rds.GetRedis()
-		defer redis.Close()
 		ctx := context.Background()
 
 		res, err := redis.GetBit(ctx, postKey, int64(id)-1).Result()
