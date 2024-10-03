@@ -7,6 +7,7 @@ import (
 	"ConfessionWall/app/services/postService"
 	"ConfessionWall/app/services/userService"
 	"ConfessionWall/app/utils"
+	"ConfessionWall/config/config"
 	"ConfessionWall/config/rds"
 	"context"
 	"time"
@@ -68,7 +69,7 @@ func GetPostList(c *gin.Context) {
 
 		// 获取用户信息
 		nickname := ""
-		avatar := ""
+		avatar := config.Config.GetString("default_avatar")
 		if !post.Unnamed {
 			user, err := userService.GetUserByID(post.UserID)
 			if err == nil { // 如果能获取到用户
