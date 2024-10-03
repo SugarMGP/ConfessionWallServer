@@ -4,9 +4,9 @@ go 1.22.6
 
 require (
 	github.com/gin-gonic/gin v1.10.0
-	github.com/go-redis/redis/v8 v8.11.5
 	github.com/golang-jwt/jwt/v5 v5.2.1
 	github.com/h2non/filetype v1.1.3
+	github.com/redis/go-redis/v9 v9.6.1
 	github.com/spf13/viper v1.19.0
 	github.com/ulule/limiter/v3 v3.11.2
 	go.uber.org/zap v1.27.0
