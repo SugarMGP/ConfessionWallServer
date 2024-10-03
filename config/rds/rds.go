@@ -18,6 +18,7 @@ func init() {
 		PoolSize:     config.Config.GetInt("redis.PoolSize"),
 		MinIdleConns: config.Config.GetInt("redis.MinIdleConns"),
 	})
+
 	// 测试连接是否成功
 	ctx := context.Background()
 	pong, err := redisClient.Ping(ctx).Result()
@@ -32,4 +33,4 @@ func init() {
 
 func GetRedis() *redis.Client {
 	return redisClient
-} //
+}
