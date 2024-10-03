@@ -1,23 +1,27 @@
 package midwares
 
 import (
+	"ConfessionWall/config/rds"
 	"time"
 
 	"github.com/gin-gonic/gin"
 	"github.com/ulule/limiter/v3"
 	mgin "github.com/ulule/limiter/v3/drivers/middleware/gin"
-	"github.com/ulule/limiter/v3/drivers/store/memory"
+	"github.com/ulule/limiter/v3/drivers/store/redis"
 )
 
 func Limiter() gin.HandlerFunc {
-	// 每秒允许4个请求
+	// 每秒允许5个请求
 	rate := limiter.Rate{
 		Period: 1 * time.Second,
-		Limit:  4,
+		Limit:  5,
 	}
 
-	// 内存存储
-	store := memory.NewStore()
+	// Redis存储
+	store, err := redis.NewStore(rds.GetRedis())
+	if err != nil {
+		panic(err)
+	}
 
 	// 创建限流中间件
 	return mgin.NewMiddleware(limiter.New(store, rate), mgin.WithKeyGetter(func(c *gin.Context) string {
