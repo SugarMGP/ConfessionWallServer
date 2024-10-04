@@ -6,15 +6,15 @@ import (
 	"gorm.io/gorm"
 )
 
-type Post struct { //json tag for "GetMyPostList"
-	ID        uint           `json:"post_id"`
-	Content   string         `json:"content" gorm:"type:text"`
-	UserID    uint           `json:"-"`
-	Unnamed   bool           `json:"unnamed"`
-	Likes     int64          `json:"likes" gorm:"default:0"`
-	PostTime  time.Time      `json:"-"`
-	CreatedAt time.Time      `json:"-"`
-	UpdatedAt time.Time      `json:"-"`
-	DeletedAt gorm.DeletedAt `json:"-"`
-	Private   bool           `json:"private"`
+type Post struct {
+	ID        uint
+	Content   string `gorm:"type:text"`
+	UserID    uint
+	Unnamed   bool
+	Likes     int64 `gorm:"default:0"`
+	PostTime  time.Time
+	CreatedAt time.Time
+	UpdatedAt time.Time
+	DeletedAt gorm.DeletedAt
+	Private   bool
 }

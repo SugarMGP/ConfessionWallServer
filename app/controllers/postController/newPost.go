@@ -5,7 +5,6 @@ import (
 	"ConfessionWall/app/models"
 	"ConfessionWall/app/services/postService"
 	"ConfessionWall/app/utils"
-	"strconv"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -15,7 +14,7 @@ import (
 type NewPostData struct {
 	Content  string `json:"content" binding:"required"`
 	Unnamed  bool   `json:"unnamed"`
-	PostUnix string `json:"post_unix"`
+	PostUnix int64  `json:"post_unix"`
 	Private  bool   `json:"private"`
 }
 
@@ -38,14 +37,8 @@ func NewPost(c *gin.Context) {
 	}
 
 	postTime := time.Now()
-	if data.PostUnix != "" {
-		unix, err := strconv.ParseInt(data.PostUnix, 10, 64)
-		if err != nil {
-			zap.L().Debug("string转换int64失败", zap.Error(err))
-			c.AbortWithError(200, apiException.ParamsError)
-			return
-		}
-		postTime = time.Unix(unix, 0)
+	if data.PostUnix != 0 {
+		postTime = time.Unix(data.PostUnix, 0)
 	}
 
 	// 新建帖子
