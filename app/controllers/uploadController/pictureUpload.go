@@ -6,7 +6,6 @@ import (
 	"crypto/md5"
 	"fmt"
 	"io"
-	"net"
 	"os"
 	"path/filepath"
 
@@ -64,8 +63,7 @@ func PictureUpload(c *gin.Context) {
 	hashString := fmt.Sprintf("%x", md5.Sum(data))
 
 	filePath := "./static/" + hashString + ext
-	host, _, _ := net.SplitHostPort(c.Request.Host)
-	url := "http://" + host + ":8080" + "/static/" + hashString + ext
+	url := "http://" + utils.SplitHost(c.Request.Host) + ":8080" + "/static/" + hashString + ext
 
 	// 检查文件是否已存在
 	if _, err := os.Stat(filePath); err == nil {
