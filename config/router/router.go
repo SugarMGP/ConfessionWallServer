@@ -20,6 +20,7 @@ func Init(r *gin.Engine) {
 	{
 		api.GET("/user", userController.GetProfile)
 		api.PUT("/user", userController.SetProfile)
+		api.GET("/user/sign", userController.Sign)
 
 		api.GET("/my_confession", postController.GetMyPostList)
 		api.GET("/confession", postController.GetPostList)
@@ -38,5 +39,7 @@ func Init(r *gin.Engine) {
 
 		api.POST("/confession/like", postController.LikePost)
 		api.POST("/confession/comment/like", commentController.LikeComment)
+
+		api.GET("/activity", userController.GetActivityUserList)
 	}
 }

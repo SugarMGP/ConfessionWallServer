@@ -6,4 +6,5 @@ type User struct {
 	Nickname string
 	Password string
 	Avatar   string
+	Activity int `gorm:"default:0"`
 }

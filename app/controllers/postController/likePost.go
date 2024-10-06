@@ -71,6 +71,6 @@ func LikePost(c *gin.Context) {
 		c.AbortWithError(200, apiException.InternalServerError)
 		return
 	}
-
+	zap.L().Info("点赞帖子成功", zap.Uint("post_id", data.PostID), zap.Uint("user_id", id))
 	utils.JsonSuccessResponse(c, nil)
 }

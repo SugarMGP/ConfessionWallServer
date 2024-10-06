@@ -2,6 +2,7 @@ package postController
 
 import (
 	"ConfessionWall/app/apiException"
+	"ConfessionWall/app/services/activityServive"
 	"ConfessionWall/app/services/postService"
 	"ConfessionWall/app/utils"
 
@@ -53,7 +54,12 @@ func DeletePost(c *gin.Context) {
 		c.AbortWithError(200, apiException.InternalServerError)
 		return
 	}
-
+	err = activityServive.DecreaseActivity(id, 3)
+	if err != nil {
+		zap.L().Error("减少活跃度失败", zap.Uint("user_id", id), zap.Error(err))
+		c.AbortWithError(200, apiException.InternalServerError)
+		return
+	}
 	// 成功删除帖子
 	zap.L().Info("帖子删除成功", zap.Uint("user_id", id), zap.Uint("post_id", data.PostID))
 	utils.JsonSuccessResponse(c, nil)
