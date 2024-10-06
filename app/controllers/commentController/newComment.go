@@ -58,12 +58,14 @@ func NewComment(c *gin.Context) {
 		c.AbortWithError(200, apiException.InternalServerError)
 		return
 	}
+
 	err = activityServive.IncreaseActivity(id, 2)
 	if err != nil {
 		zap.L().Error("增加活跃度失败", zap.Uint("user_id", id), zap.Error(err))
 		c.AbortWithError(200, apiException.InternalServerError)
 		return
 	}
+
 	// 成功创建评论
 	zap.L().Info("发布评论成功", zap.Uint("user_id", id), zap.Uint("post_id", data.PostID))
 	utils.JsonSuccessResponse(c, nil)

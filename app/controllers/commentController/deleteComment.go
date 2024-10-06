@@ -52,12 +52,14 @@ func DeleteComment(c *gin.Context) {
 		c.AbortWithError(200, apiException.InternalServerError)
 		return
 	}
+
 	err = activityServive.DecreaseActivity(id, 2)
 	if err != nil {
 		zap.L().Error("减少活跃度失败", zap.Uint("user_id", id), zap.Error(err))
 		c.AbortWithError(200, apiException.InternalServerError)
 		return
 	}
+
 	zap.L().Info("评论删除成功", zap.Uint("user_id", id), zap.Uint("comment_id", data.CommentID))
 	utils.JsonSuccessResponse(c, nil)
 }

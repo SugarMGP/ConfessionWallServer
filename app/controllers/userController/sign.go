@@ -15,8 +15,9 @@ import (
 
 func Sign(c *gin.Context) {
 	id := c.GetUint("user_id")
-	var offset int = time.Now().Local().Day() - 1
-	var keys string = signService.GetIdKey(id)
+
+	offset := time.Now().Local().Day() - 1
+	keys := signService.GetIdKey(id)
 	resid := rds.GetRedis()
 	ctx := context.Background()
 
@@ -29,7 +30,7 @@ func Sign(c *gin.Context) {
 	}
 
 	if isSignedIn == 1 {
-		zap.L().Info("用户今日已签到", zap.Uint("user_id", id))
+		c.AbortWithError(200, apiException.HasSigned)
 		return
 	}
 

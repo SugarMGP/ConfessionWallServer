@@ -23,6 +23,7 @@ var (
 	FileTooLarge            = NewError(200511, "文件过大!")
 	ContentTooLong          = NewError(200512, "内容过长!")
 	NicknameTooLong         = NewError(200512, "昵称过长!")
+	HasSigned               = NewError(200513, "今天已经签到过了!")
 )
 
 func (e *Error) Error() string {

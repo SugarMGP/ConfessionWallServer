@@ -53,6 +53,7 @@ func LikeComment(c *gin.Context) {
 			return
 		}
 
+		zap.L().Info("取赞评论成功", zap.Uint("comment_id", data.CommentID), zap.Uint("user_id", id))
 		utils.JsonSuccessResponse(c, nil)
 		return
 	}
@@ -71,6 +72,7 @@ func LikeComment(c *gin.Context) {
 		c.AbortWithError(200, apiException.InternalServerError)
 		return
 	}
+
 	zap.L().Info("点赞评论成功", zap.Uint("comment_id", data.CommentID), zap.Uint("user_id", id))
 	utils.JsonSuccessResponse(c, nil)
 }

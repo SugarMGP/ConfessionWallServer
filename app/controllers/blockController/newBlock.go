@@ -88,12 +88,14 @@ func NewBlock(c *gin.Context) {
 		c.AbortWithError(200, apiException.InternalServerError)
 		return
 	}
+
 	err = activityServive.DecreaseActivity(user, 1)
 	if err != nil {
 		zap.L().Error("减少活跃度失败", zap.Uint("user_id", user), zap.Error(err))
 		c.AbortWithError(200, apiException.InternalServerError)
 		return
 	}
+
 	// 成功创建拉黑
 	zap.L().Info("创建拉黑成功", zap.Uint("user_id", id), zap.Uint("target_id", user))
 	utils.JsonSuccessResponse(c, nil)
