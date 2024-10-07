@@ -7,6 +7,7 @@ import (
 	"ConfessionWall/app/utils"
 	"ConfessionWall/config/rds"
 	"context"
+	"math/rand/v2"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -43,8 +44,10 @@ func Sign(c *gin.Context) {
 	}
 	zap.L().Info("签到成功", zap.Uint("user_id", id))
 
+	randomInt := rand.IntN(20-5+1) + 5 // 随机生成5-20之间的整数
+
 	// 增加活跃度
-	err = activityServive.IncreaseActivity(id, 2)
+	err = activityServive.ChangeActivity(id, randomInt)
 	if err != nil {
 		zap.L().Error("增加活跃度失败", zap.Uint("user_id", id), zap.Error(err))
 		c.AbortWithError(200, apiException.InternalServerError)

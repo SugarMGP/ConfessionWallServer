@@ -12,6 +12,7 @@ import (
 type GetProfileResponse struct {
 	Nickname string `json:"nickname"`
 	Avatar   string `json:"avatar"`
+	Activity int    `json:"activity"`
 }
 
 func GetProfile(c *gin.Context) {
@@ -30,5 +31,6 @@ func GetProfile(c *gin.Context) {
 	utils.JsonSuccessResponse(c, GetProfileResponse{
 		Nickname: user.Nickname,
 		Avatar:   user.Avatar,
+		Activity: user.Activity,
 	})
 }

@@ -3,7 +3,6 @@ package blockController
 import (
 	"ConfessionWall/app/apiException"
 	"ConfessionWall/app/models"
-	"ConfessionWall/app/services/activityServive"
 	"ConfessionWall/app/services/blockService"
 	"ConfessionWall/app/services/commentService"
 	"ConfessionWall/app/services/postService"
@@ -85,13 +84,6 @@ func NewBlock(c *gin.Context) {
 	})
 	if err != nil {
 		zap.L().Error("新建拉黑失败", zap.Uint("user_id", id), zap.Uint("target_id", user), zap.Error(err))
-		c.AbortWithError(200, apiException.InternalServerError)
-		return
-	}
-
-	err = activityServive.DecreaseActivity(user, 1)
-	if err != nil {
-		zap.L().Error("减少活跃度失败", zap.Uint("user_id", user), zap.Error(err))
 		c.AbortWithError(200, apiException.InternalServerError)
 		return
 	}

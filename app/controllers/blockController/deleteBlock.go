@@ -2,7 +2,6 @@ package blockController
 
 import (
 	"ConfessionWall/app/apiException"
-	"ConfessionWall/app/services/activityServive"
 	"ConfessionWall/app/services/blockService"
 	"ConfessionWall/app/utils"
 
@@ -45,15 +44,7 @@ func DeleteBlock(c *gin.Context) {
 		return
 	}
 
-	err = activityServive.IncreaseActivity(data.TargetID, 1)
-	if err != nil {
-		zap.L().Error("增加活跃度失败", zap.Uint("user_id", data.TargetID), zap.Error(err))
-		c.AbortWithError(200, apiException.InternalServerError)
-		return
-	}
-
 	// 成功删除拉黑
 	zap.L().Info("删除拉黑成功", zap.Uint("user_id", id), zap.Uint("target_id", data.TargetID))
 	utils.JsonSuccessResponse(c, nil)
-
 }

@@ -59,7 +59,7 @@ func NewComment(c *gin.Context) {
 		return
 	}
 
-	err = activityServive.IncreaseActivity(id, 2)
+	err = activityServive.ChangeActivity(id, 5)
 	if err != nil {
 		zap.L().Error("增加活跃度失败", zap.Uint("user_id", id), zap.Error(err))
 		c.AbortWithError(200, apiException.InternalServerError)

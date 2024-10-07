@@ -56,7 +56,7 @@ func NewPost(c *gin.Context) {
 		return
 	}
 
-	err = activityServive.IncreaseActivity(id, 3)
+	err = activityServive.ChangeActivity(id, 10)
 	if err != nil {
 		zap.L().Error("增加活跃度失败", zap.Uint("user_id", id), zap.Error(err))
 		c.AbortWithError(200, apiException.InternalServerError)

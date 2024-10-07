@@ -55,7 +55,7 @@ func DeletePost(c *gin.Context) {
 		return
 	}
 
-	err = activityServive.DecreaseActivity(id, 3)
+	err = activityServive.ChangeActivity(id, -10)
 	if err != nil {
 		zap.L().Error("减少活跃度失败", zap.Uint("user_id", id), zap.Error(err))
 		c.AbortWithError(200, apiException.InternalServerError)
